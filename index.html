@@ -314,28 +314,51 @@
     const cloud = new EventSource(`https://ntfy.sh/${TOPIC_ID}/sse`);
     
     cloud.onmessage = (e) => {
-        try {
-            const msg = JSON.parse(e.data);
-            if (msg.event === 'keepalive') return; // Bỏ qua tin rác
-            
-            const p = JSON.parse(msg.message).price;
-            if (p) {
-                prices.btcd_cloud = parseFloat(p);
-                // Lưu vào bộ nhớ ngay
-                localStorage.setItem('last_btcd_v17_cloud', prices.btcd_cloud);
+    try {
+        const msg = JSON.parse(e.data);
 
-                // Cập nhật nhịp tim
-                lastHeartbeat = Date.now();
-                if (dotEl.classList.contains('dead')) dotEl.classList.remove('dead');
-                
-                // Nếu đang ở chế độ Cloud thì điền vào ô Input
-                if (appState === 0) {
-                    inputEl.value = prices.btcd_cloud.toFixed(2);
-                }
-                render();
-            }
-        } catch(err){}
-    };
+        // Bỏ qua keepalive của ntfy
+        if (msg.event !== 'message') return;
+
+        let price = null;
+        let mode = 'UNKNOWN';
+
+        // Ưu tiên JSON (V3.4+)
+        try {
+            const payload = JSON.parse(msg.message);
+            price = payload.price;
+            mode = payload.mode || 'IDLE';
+        } catch {
+            // Fallback V18 (string thuần)
+            price = parseFloat(msg.message);
+        }
+
+        // Validate
+        if (typeof price !== 'number' || isNaN(price)) return;
+
+        prices.btcd_cloud = price;
+
+        // Lưu cache
+        localStorage.setItem('last_btcd_v17_cloud', price);
+
+        // Heartbeat
+        lastHeartbeat = Date.now();
+        if (dotEl.classList.contains('dead')) {
+            dotEl.classList.remove('dead');
+        }
+
+        // Đang Cloud mode → fill input
+        if (appState === 0 && inputEl) {
+            inputEl.value = price.toFixed(2);
+        }
+
+        console.log('[CLOUD]', price, mode);
+        render();
+
+    } catch (err) {
+        console.error('Cloud parse error', err);
+    }
+};
 
     // WATCHDOG (Kiểm tra kết nối mỗi giây)
     setInterval(() => {
