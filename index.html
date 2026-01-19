@@ -1,196 +1,394 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SNIPER GAP - EVANTUAN VIP</title>
+    <title>RADAGAP - EVANTUAN PRO</title>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* --- 1. GIỮ NGUYÊN CSS GỐC TỪ BEST.HTML (PHẦN TRÊN) --- */
+        /* --- CORE VARIABLES --- */
         :root {
-            --bg-color: #05080a; 
-            --card-bg: rgba(13, 19, 26, 0.95);
+            --bg-color: #05080a;
+            --card-bg: rgba(10, 15, 30, 0.4);
+            /* NAVY DARK 0.4 */
             --border: rgba(107, 139, 164, 0.25);
-            --cyan: #00f3ff; 
+            --cyan: #00f3ff;
             --text-main: #e9ecef;
             --text-dim: #6b8ba4;
-            --up: #00ffaa; 
+            --up: #00ffaa;
             --down: #ff4d4d;
-            --neon-green: 0 0 20px rgba(0, 255, 170, 0.3);
-            --neon-red: 0 0 20px rgba(255, 77, 77, 0.3);
-            
-            /* Màu Alert mới */
+
+            --neon-green: 0 0 15px rgba(0, 255, 170, 0.4);
+            --neon-red: 0 0 15px rgba(255, 77, 77, 0.4);
+
             --tp-color: #00ffaa;
             --sl-color: #ff4d4d;
             --any-color: #00f3ff;
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
 
-        body { 
-            font-family: 'Rajdhani', sans-serif; 
+        body {
+            font-family: 'Rajdhani', sans-serif;
             background-color: var(--bg-color);
-            background-image: 
+            background-image:
                 linear-gradient(rgba(107, 139, 164, 0.03) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(107, 139, 164, 0.03) 1px, transparent 1px);
             background-size: 40px 40px;
-            color: var(--text-main); 
-            margin: 0; padding: 0;
-            min-height: 100dvh; 
-            display: flex; flex-direction: column; align-items: center;
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .app-container {
-            width: 100%; max-width: 450px; 
+            width: 100%;
+            max-width: 450px;
             min-height: 100dvh;
-            display: flex; flex-direction: column;
-            padding: 16px 20px 40px 20px; /* Giữ nguyên padding gốc */
-            gap: 12px;
+            display: flex;
+            flex-direction: column;
+            padding: 16px 20px 20px 20px;
+            gap: 10px;
             position: relative;
         }
 
+        /* HEADER */
         .header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding-bottom: 8px; border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
         }
-        .brand { 
-            font-weight: 700; font-size: 1.5rem; 
-            letter-spacing: 2px; color: #fff;
-            text-shadow: 0 0 15px rgba(255,255,255,0.2);
+
+        .brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            color: #fff;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
         }
-        .live-tag { 
-            color: var(--cyan); font-size: 0.8rem; font-weight: 700; 
-            background: rgba(0, 243, 255, 0.05); padding: 4px 10px;
-            border: 1px solid rgba(0, 243, 255, 0.3); border-radius: 4px;
-            letter-spacing: 1px;
+
+        /* NÚT TẮT ÂM (LIVE TAG) */
+        .live-tag {
+            color: var(--cyan);
+            font-size: 0.8rem;
+            font-weight: 700;
+            background: rgba(0, 243, 255, 0.05);
+            padding: 4px 10px;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            /* Thêm hiệu ứng bấm */
         }
 
         .live-dot {
-            display: inline-block; width: 6px; height: 6px;
-            background-color: var(--cyan); border-radius: 50%;
-            margin-right: 8px; box-shadow: 0 0 5px var(--cyan);
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background-color: var(--cyan);
+            border-radius: 50%;
+            margin-right: 8px;
+            box-shadow: 0 0 5px var(--cyan);
             transition: all 0.3s ease;
         }
+
         .live-dot.dead {
-            background-color: var(--down); box-shadow: 0 0 8px var(--down);
+            background-color: var(--down);
+            box-shadow: 0 0 8px var(--down);
             animation: blinkRed 1s infinite;
         }
-        @keyframes blinkRed { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 
-        .btcd-section { display: flex; align-items: center; justify-content: space-between; margin-top: 5px; }
-        .btcd-label { 
+        @keyframes blinkRed {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* BTCD SECTION */
+        .btcd-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 5px;
+        }
+
+        .btcd-label {
             font-size: 0.9rem;
-            color: var(--cyan); 
-            font-weight: 700; 
-            cursor: pointer; 
-        }
-        
-        #btcd-input {
-            width: 120px; 
-            background: #000;
-            border: 1px solid #1a2533; 
-            border-radius: 8px; padding: 8px 0 8px 5px; 
             color: var(--cyan);
-            font-size: 1.8rem; font-family: 'Rajdhani', sans-serif; font-weight: 700; 
-            text-align: center; outline: none;
-            transition: border-color 0.3s, color 0.3s;
+            font-weight: 700;
+            cursor: pointer;
         }
-        #btcd-input:focus { border-color: var(--cyan); }
-        #btcd-input.manual-mode { border-color: var(--text-dim); color: #fff; background: #111; }
 
-        /* --- SCOPE GAP GIỮ NGUYÊN TỈ LỆ 100% --- */
+        #btcd-input {
+            width: 120px;
+            background: #000;
+            border: 1px solid #1a2533;
+            border-radius: 8px;
+            padding: 8px 0 8px 5px;
+            color: var(--cyan);
+            font-size: 1.8rem;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        #btcd-input:focus {
+            border-color: var(--cyan);
+        }
+
+        #btcd-input.manual-mode {
+            border-color: var(--text-dim);
+            color: #fff;
+            background: #111;
+        }
+
+        /* SCOPE CONTAINER */
         .scope-container {
-            flex: 1; display: flex; flex-direction: column; 
-            justify-content: center; align-items: center;
-            background: rgba(13, 19, 26, 0.4);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: 16px;
-            position: relative; margin: 10px 0;
-            padding: 20px 0;
-            min-height: 200px; /* Chiều cao gốc */
+            position: relative;
+            margin: 5px 0;
+            padding: 15px 0;
+            min-height: 180px;
+            transition: border-color 0.3s, box-shadow 0.3s;
         }
 
         .scope-corner {
-            position: absolute; width: 15px; height: 15px;
-            border-color: var(--text-dim); border-style: solid;
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border-color: var(--text-dim);
+            border-style: solid;
             opacity: 0.5;
         }
-        .tl { top: 8px; left: 8px; border-width: 2px 0 0 2px; }
-        .tr { top: 8px; right: 8px; border-width: 2px 2px 0 0; }
-        .bl { bottom: 8px; left: 8px; border-width: 0 0 2px 2px; }
-        .br { bottom: 8px; right: 8px; border-width: 0 2px 2px 0; }
+
+        .tl {
+            top: 8px;
+            left: 8px;
+            border-width: 2px 0 0 2px;
+        }
+
+        .tr {
+            top: 8px;
+            right: 8px;
+            border-width: 2px 2px 0 0;
+        }
+
+        .bl {
+            bottom: 8px;
+            left: 8px;
+            border-width: 0 0 2px 2px;
+        }
+
+        .br {
+            bottom: 8px;
+            right: 8px;
+            border-width: 0 2px 2px 0;
+        }
 
         #market-gap {
-            font-size: 9rem; font-weight: 700; line-height: 1; 
+            font-size: 8.5rem;
+            font-weight: 700;
+            line-height: 1;
             letter-spacing: -4px;
-            text-shadow: 0 0 30px rgba(0,0,0,0.5);
+            text-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
             transition: color 0.2s;
+            position: relative;
+            z-index: 10;
         }
 
         .gap-meter {
-            width: 85%; height: 4px; background: #1a2533;
-            border-radius: 2px; position: relative; overflow: hidden;
+            width: 85%;
+            height: 4px;
+            background: #1a2533;
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
             margin-top: 15px;
+            z-index: 10;
         }
+
         .gap-indicator {
-            width: 6px; height: 100%; background: #fff;
-            position: absolute; left: 50%; top: 0;
+            width: 6px;
+            height: 100%;
+            background: #fff;
+            position: absolute;
+            left: 50%;
+            top: 0;
             transform: translateX(-50%);
-            transition: left 0.1s ease-out; 
+            transition: left 0.1s ease-out;
             box-shadow: 0 0 8px #fff;
         }
+
         .gap-thresholds {
-            width: 85%; display: flex; justify-content: space-between;
-            margin-top: 5px; font-size: 0.7rem; color: var(--text-dim); font-weight: 600;
+            width: 85%;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            font-weight: 600;
+            z-index: 10;
         }
 
-        /* --- 2. CSS CHO GRID 4 CỘT (TỐI ƯU SONY XPERIA) --- */
-        .grid { 
-            display: grid; 
-            grid-template-columns: repeat(4, 1fr); /* 4 Cột đều nhau */
-            gap: 6px; /* Khoảng cách nhỏ để vừa màn hình hẹp */
-            margin-bottom: 10px; 
+        /* --- ENERGY BAR STACK --- */
+        .ema-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 5px;
+            width: 100%;
         }
-        
+
+        .ema-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0 12px;
+            height: 38px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* TEXT */
+        .ema-name,
+        .ema-gap,
+        .ema-price {
+            position: relative;
+            z-index: 5;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        .ema-name {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            font-weight: 700;
+            letter-spacing: 1px;
+            width: 70px;
+        }
+
+        .ema-gap {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #fff;
+            text-align: center;
+            flex: 1;
+        }
+
+        .ema-price {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            font-weight: 600;
+            text-align: right;
+            width: 70px;
+        }
+
+        /* CENTER LINE */
+        .ema-row::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 10%;
+            bottom: 10%;
+            width: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 1;
+        }
+
+        /* ENERGY BAR */
+        .energy-bar {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            height: 100%;
+            width: 0%;
+            left: 50%;
+            z-index: 2;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            opacity: 0.4;
+        }
+
+        /* Border Highlight */
+        .ema-row.alert-long {
+            border-color: var(--up);
+            box-shadow: var(--neon-green);
+        }
+
+        .ema-row.alert-short {
+            border-color: var(--down);
+            box-shadow: var(--neon-red);
+        }
+
+        .ema-row.active-scope {
+            border: 1px solid var(--cyan);
+            background: rgba(0, 243, 255, 0.1);
+        }
+
+        /* GRID 4x2 */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            margin-bottom: 5px;
+        }
+
         .card {
-            background: var(--card-bg); 
-            padding: 6px 4px; /* Padding nhỏ gọn */
+            background: var(--card-bg);
+            padding: 6px 2px;
             border-radius: 8px;
             border: 1px solid var(--border);
-            display: flex; flex-direction: column;
+            display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            min-height: 55px; /* Chiều cao tối thiểu */
+            min-height: 55px;
         }
 
-        .label { 
-            font-size: 0.6rem; /* Font chữ nhãn nhỏ lại */
-            color: var(--text-dim); 
-            font-weight: 700; 
-            text-transform: uppercase; 
-            letter-spacing: 0; 
-            white-space: nowrap; /* Không xuống dòng */
+        .label {
+            font-size: 0.6rem;
+            color: var(--text-dim);
+            font-weight: 700;
+            text-transform: uppercase;
+            white-space: nowrap;
         }
-        
-        .val { 
-            font-size: 1rem; /* Font số vừa phải */
-            font-weight: 600; 
-            color: #fff; 
-            margin-top: 2px; 
-        }
-        
-        /* Card Full (BTCD) nằm dưới cùng */
-        .card.full { 
-            grid-column: span 4; 
-            flex-direction: row; 
-            justify-content: space-between; 
-            align-items: center;
-            padding: 8px 15px;
-        }
-        .card.full .val { margin-top: 0; font-size: 1.2rem; }
-        .card.full .label { font-size: 0.7rem; letter-spacing: 1px; }
 
-        /* Style Input trong suốt */
+        .val {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+            margin-top: 2px;
+        }
+
         .trade-input {
             background: transparent;
             border: none;
@@ -199,408 +397,497 @@
             font-size: 1.1rem;
             font-weight: 700;
             width: 100%;
-            padding: 0; margin: 0; outline: none;
+            padding: 0;
+            margin: 0;
+            outline: none;
             text-align: center;
             -moz-appearance: textfield;
         }
-        .trade-input::-webkit-outer-spin-button,
-        .trade-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-        .trade-input:focus { color: var(--cyan); }
-        .trade-input::placeholder { opacity: 0; }
 
+        .trade-input:focus {
+            color: var(--cyan);
+        }
+
+        .trade-input::-webkit-outer-spin-button,
+        .trade-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .trade-input {
+            -moz-appearance: textfield;
+        }
+
+        /* ACTION BAR */
         .action-bar {
-            padding: 20px; border-radius: 12px; text-align: center;
-            font-weight: 700; font-size: 1.4rem; text-transform: uppercase;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.4rem;
+            text-transform: uppercase;
             letter-spacing: 1.5px;
             transition: all 0.3s ease;
             margin-top: auto;
         }
 
-        .neutral { background: #111821; color: var(--text-dim); border: 1px solid #233142; }
-        .long { background: rgba(16, 185, 129, 0.2); color: var(--up); border: 1px solid var(--up); box-shadow: var(--neon-green); }
-        .short { background: rgba(239, 68, 68, 0.2); color: var(--down); border: 1px solid var(--down); box-shadow: var(--neon-red); }
+        .neutral {
+            background: var(--card-bg);
+            color: var(--text-dim);
+            border: 1px solid var(--border);
+        }
 
-        .pulse { animation: flash 0.3s ease-out; }
-        @keyframes flash { 0% { filter: brightness(2); } 100% { filter: brightness(1); } }
+        .long {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--up);
+            border: 1px solid var(--up);
+            box-shadow: var(--neon-green);
+        }
 
-        /* Alert Effects */
-        .hit-tp { border-color: var(--tp-color) !important; box-shadow: 0 0 10px var(--tp-color) inset !important; }
-        .hit-sl { border-color: var(--sl-color) !important; box-shadow: 0 0 10px var(--sl-color) inset !important; }
-        .hit-any { border-color: var(--any-color) !important; box-shadow: 0 0 10px var(--any-color) inset !important; }
+        .short {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--down);
+            border: 1px solid var(--down);
+            box-shadow: var(--neon-red);
+        }
+
+        .pulse {
+            animation: flash 0.3s ease-out;
+        }
+
+        @keyframes flash {
+            0% {
+                filter: brightness(2);
+            }
+
+            100% {
+                filter: brightness(1);
+            }
+        }
+
+        .hit-tp {
+            border-color: var(--tp-color) !important;
+            box-shadow: 0 0 10px var(--tp-color) inset !important;
+        }
+
+        .hit-sl {
+            border-color: var(--sl-color) !important;
+            box-shadow: 0 0 10px var(--sl-color) inset !important;
+        }
+
+        .hit-any {
+            border-color: var(--any-color) !important;
+            box-shadow: 0 0 10px var(--any-color) inset !important;
+        }
     </style>
 </head>
+
 <body onclick="initTrading()">
 
-<div class="app-container">
-    <div class="header">
-        <div class="brand">SNIPER GAP</div>
-        <div class="live-tag">®EVANTUAN</div>
+    <div class="app-container">
+        <div class="header">
+            <div class="brand">RADAGAP</div>
+            <div class="live-tag" id="sound-btn" onclick="toggleSound(event)">®EVANTUAN</div>
+        </div>
+
+        <div class="btcd-section">
+            <div style="display:flex; align-items:center">
+                <span id="connection-dot" class="live-dot dead"></span>
+                <span class="btcd-label" onclick="handleLabelClick()" id="status-label">BTC.D REF (AUTO)</span>
+            </div>
+            <input type="text" id="btcd-input" value="0.00" step="0.01" readonly>
+        </div>
+
+        <div class="scope-container" id="scope-bg">
+            <div class="scope-corner tl"></div>
+            <div class="scope-corner tr"></div>
+            <div class="scope-corner bl"></div>
+            <div class="scope-corner br"></div>
+            <div id="market-gap">0</div>
+            <div class="gap-meter">
+                <div class="gap-indicator" id="gap-visual"></div>
+            </div>
+            <div class="gap-thresholds">
+                <span>LONG (-20)</span>
+                <span>0</span>
+                <span>SHORT (+20)</span>
+            </div>
+        </div>
+
+        <div class="ema-stack">
+            <div class="ema-row" id="row-orig">
+                <div class="energy-bar"></div> <span class="ema-name">EMA</span>
+                <span class="ema-gap" id="gap-orig">Wait...</span>
+                <span class="ema-price" id="fv-orig">--</span>
+            </div>
+            <div class="ema-row" id="row-50">
+                <div class="energy-bar"></div>
+                <span class="ema-name">EMA50</span>
+                <span class="ema-gap" id="gap-50">Wait...</span>
+                <span class="ema-price" id="fv-50">--</span>
+            </div>
+            <div class="ema-row" id="row-100">
+                <div class="energy-bar"></div>
+                <span class="ema-name">EMA100</span>
+                <span class="ema-gap" id="gap-100">Wait...</span>
+                <span class="ema-price" id="fv-100">--</span>
+            </div>
+            <div class="ema-row" id="row-200">
+                <div class="energy-bar"></div>
+                <span class="ema-name">EMA200</span>
+                <span class="ema-gap" id="gap-200">Wait...</span>
+                <span class="ema-price" id="fv-200">--</span>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="card"><span class="label">BTC</span>
+                <div id="btc-p" class="val">0.00</div>
+            </div>
+            <div class="card"><span class="label">ETH</span>
+                <div id="eth-p" class="val">0.00</div>
+            </div>
+            <div class="card"><span class="label">ETH/BTC</span>
+                <div id="ratio" class="val" style="color:var(--cyan)">0.00</div>
+            </div>
+            <div class="card"><span class="label">FAIR VAL</span>
+                <div id="fv-main" class="val">0.00</div>
+            </div>
+
+            <div class="card"><span class="label">ENTRY</span><input type="number" id="inp-entry" class="trade-input">
+            </div>
+            <div class="card" id="card-tp"><span class="label">TP</span><input type="number" id="inp-tp"
+                    class="trade-input"></div>
+            <div class="card" id="card-sl"><span class="label">SL</span><input type="number" id="inp-sl"
+                    class="trade-input" readonly></div>
+            <div class="card" id="card-any"><span class="label">ANY</span><input type="number" id="inp-any"
+                    class="trade-input"></div>
+        </div>
+
+        <div id="action" class="action-bar neutral">WAITING SIGNAL...</div>
     </div>
 
-    <div class="btcd-section">
-        <div style="display:flex; align-items:center">
-            <span id="connection-dot" class="live-dot dead"></span>
-            <span class="btcd-label" onclick="handleLabelClick()" id="status-label">BTC.D REF (AUTO)</span>
-        </div>
-        <input type="text" id="btcd-input" value="0.00" step="0.01" readonly>
-    </div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js";
 
-    <div class="scope-container" id="scope-bg">
-        <div class="scope-corner tl"></div><div class="scope-corner tr"></div>
-        <div class="scope-corner bl"></div><div class="scope-corner br"></div>
-        <div id="market-gap">0</div>
-        <div class="gap-meter">
-            <div class="gap-indicator" id="gap-visual"></div>
-        </div>
-        <div class="gap-thresholds">
-            <span>LONG (-20)</span>
-            <span>0</span>
-            <span>SHORT (+20)</span>
-        </div>
-    </div>
+        // CONFIG
+        const firebaseConfig = { databaseURL: "https://radagap-6bda0-default-rtdb.asia-southeast1.firebasedatabase.app" };
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
 
-    <div class="grid">
-        <div class="card"><span class="label">BTC</span><div id="btc-p" class="val">0.00</div></div>
-        <div class="card"><span class="label">ETH</span><div id="eth-p" class="val">0.00</div></div>
-        <div class="card"><span class="label">ETH/BTC</span><div id="ratio" class="val" style="color:var(--cyan)">0.00</div></div>
-        <div class="card"><span class="label">FAIR VAL</span><div id="fv" class="val">0.00</div></div>
+        const btcdM15Ref = ref(db, 'btcd_m15');
+        const btcdH1Ref = ref(db, 'btcd_h1');
+        const btcdLiveRef = ref(db, 'btcd');
 
-        <div class="card">
-            <span class="label">ENTRY</span>
-            <input type="number" id="inp-entry" class="trade-input" placeholder=".">
-        </div>
-        <div class="card" id="card-tp">
-            <span class="label">TP</span>
-            <input type="number" id="inp-tp" class="trade-input" placeholder=".">
-        </div>
-        <div class="card" id="card-sl">
-            <span class="label">SL</span>
-            <input type="number" id="inp-sl" class="trade-input" placeholder="." readonly>
-        </div>
-        <div class="card" id="card-any">
-            <span class="label">ANY</span>
-            <input type="number" id="inp-any" class="trade-input" placeholder=".">
-        </div>
+        const ORIGIN_D = 59.52;
+        const ORIGIN_P = 0.034610;
+        const SENSITIVITY = 3.3;
+        const TELEGRAM_TOKEN = "8515054406:AAEy6ywkkUqTybyBXKHMZUfLiCdwb1A13Yw";
+        const TELEGRAM_CHAT_ID = "5163898258";
 
-        <div class="card full">
-            <span class="label">BTC.D STATUS</span>
-            <div id="btcd-rt" class="val" style="color:var(--cyan)">WAITING...</div>
-        </div>
-    </div>
+        let market = { btc: 0, eth: 0, ratio: 0, btcd_live: 0 };
+        let btcd_emas = { m15_50: 0, h1_50: 0, h1_100: 0, h1_200: 0 };
+        let ethbtc_emas = { m15_50: 0, h1_50: 0, h1_100: 0, h1_200: 0 };
 
-    <div id="action" class="action-bar neutral">WAITING SIGNAL...</div>
-</div>
-
-<script type="module">
-    // --- GIỮ NGUYÊN LOGIC TELEGRAM & BOT ---
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
-    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js";
-
-    const firebaseConfig = { databaseURL: "https://sniper-gap-default-rtdb.asia-southeast1.firebasedatabase.app" };
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const btcdRef = ref(db, 'btcd');
-
-    const D_REF = 59.52; 
-    const P_REF = 0.034610; 
-    const SENSITIVITY = 3.3;
-    const TELEGRAM_TOKEN = "8515054406:AAEy6ywkkUqTybyBXKHMZUfLiCdwb1A13Yw";
-    const TELEGRAM_CHAT_ID = "5163898258";
-
-    let prices = { btc: 0, eth: 0, ratio: 0, btcd_cloud: 0 };
-    let isAlarming = false;
-    let alarmInterval = null;
-    let wakeLock = null;
-    let audioStarted = false;
-    let appState = 0; 
-    let lastHeartbeat = Date.now();
-    let lastAlertTime = { tp: 0, sl: 0, any: 0 };
-
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const inputEl = document.getElementById('btcd-input');
-    const labelEl = document.getElementById('status-label');
-    const dotEl = document.getElementById('connection-dot');
-    
-    // Khai báo Elements Mới
-    const inpEntry = document.getElementById('inp-entry');
-    const inpTp = document.getElementById('inp-tp');
-    const inpSl = document.getElementById('inp-sl');
-    const inpAny = document.getElementById('inp-any');
-    const cardTp = document.getElementById('card-tp');
-    const cardSl = document.getElementById('card-sl');
-    const cardAny = document.getElementById('card-any');
-
-    // Logic Auto SL (100% Entry)
-    inpEntry.addEventListener('input', () => {
-        const val = parseInt(inpEntry.value);
-        if (!isNaN(val)) inpSl.value = val * 2;
-        else inpSl.value = "";
-        resetAlerts('sl'); 
-    });
-
-    inpTp.addEventListener('input', () => resetAlerts('tp'));
-    inpAny.addEventListener('input', () => resetAlerts('any'));
-
-    function resetAlerts(type) {
-        if(type === 'tp') cardTp.classList.remove('hit-tp');
-        if(type === 'sl') cardSl.classList.remove('hit-sl');
-        if(type === 'any') cardAny.classList.remove('hit-any');
-    }
-
-    function sendTelegram(text) {
-        const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage?chat_id=${TELEGRAM_CHAT_ID}&text=${encodeURIComponent(text)}`;
-        fetch(url).catch(err => console.error("Tele Error:", err));
-    }
-
-    function checkCustomAlerts(gapVal) {
-        const NOW = Date.now();
-        const DELAY = 5000; 
-
-        const tpVal = parseInt(inpTp.value);
-        if (!isNaN(tpVal) && gapVal === tpVal && (NOW - lastAlertTime.tp > DELAY)) {
-            lastAlertTime.tp = NOW;
-            cardTp.classList.add('hit-tp');
-            playCustomSound('tp');
-            speak("Take Profit hit, " + tpVal); 
-            sendTelegram(`Price hit TP ${tpVal} ✅`);
-            setTimeout(() => cardTp.classList.remove('hit-tp'), 1000);
+        // --- LOGIC TẮT TIẾNG (MỚI) ---
+        let isMuted = false;
+        window.toggleSound = function (e) {
+            e.stopPropagation();
+            isMuted = !isMuted;
+            const btn = document.getElementById('sound-btn');
+            if (isMuted) {
+                window.speechSynthesis.cancel();
+            } else {
+                // Kêu bíp
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const o = audioCtx.createOscillator();
+                const g = audioCtx.createGain();
+                o.connect(g); g.connect(audioCtx.destination);
+                o.start(); o.stop(audioCtx.currentTime + 0.1);
+            }
         }
 
-        const slVal = parseInt(inpSl.value);
-        if (!isNaN(slVal) && gapVal === slVal && (NOW - lastAlertTime.sl > DELAY)) {
-            lastAlertTime.sl = NOW;
-            cardSl.classList.add('hit-sl');
-            playCustomSound('sl');
-            speak("Stop Loss hit, " + slVal); 
-            sendTelegram(`Price hit SL ${slVal} 🆘`);
-            setTimeout(() => cardSl.classList.remove('hit-sl'), 1000);
+        let isAlarming = false;
+        let alarmInterval = null;
+        let audioStarted = false;
+        let appState = 0;
+        let lastHeartbeat = Date.now();
+        let lastAlertTime = { tp: 0, sl: 0, any: 0 };
+        let wakeLock = null;
+
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const inputEl = document.getElementById('btcd-input');
+        const labelEl = document.getElementById('status-label');
+        const dotEl = document.getElementById('connection-dot');
+
+        const inpEntry = document.getElementById('inp-entry');
+        const inpTp = document.getElementById('inp-tp');
+        const inpSl = document.getElementById('inp-sl');
+        const inpAny = document.getElementById('inp-any');
+        const cardTp = document.getElementById('card-tp');
+        const cardSl = document.getElementById('card-sl');
+        const cardAny = document.getElementById('card-any');
+
+        inpEntry.addEventListener('input', () => {
+            const val = parseInt(inpEntry.value);
+            if (!isNaN(val)) inpSl.value = val * 2;
+            else inpSl.value = "";
+            resetAlerts('sl');
+        });
+        inpTp.addEventListener('input', () => resetAlerts('tp'));
+        inpAny.addEventListener('input', () => resetAlerts('any'));
+
+        function resetAlerts(type) {
+            if (type === 'tp') cardTp.classList.remove('hit-tp');
+            if (type === 'sl') cardSl.classList.remove('hit-sl');
+            if (type === 'any') cardAny.classList.remove('hit-any');
         }
 
-        const anyVal = parseInt(inpAny.value);
-        if (!isNaN(anyVal) && gapVal === anyVal && (NOW - lastAlertTime.any > DELAY)) {
-            lastAlertTime.any = NOW;
-            cardAny.classList.add('hit-any');
-            playCustomSound('any');
-            speak("Alert point hit, " + anyVal);
-            sendTelegram(`Price hit ANY ${anyVal} ☑️`);
-            setTimeout(() => cardAny.classList.remove('hit-any'), 1000);
+        function sendTelegram(text) {
+            const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage?chat_id=${TELEGRAM_CHAT_ID}&text=${encodeURIComponent(text)}`;
+            fetch(url).catch(err => console.error("Tele Error:", err));
         }
-    }
 
-    function playCustomSound(type) {
-        if (!audioStarted) return;
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        const now = audioCtx.currentTime;
-
-        if (type === 'tp') {
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(800, now);
-            osc.frequency.exponentialRampToValueAtTime(1200, now + 0.1);
-            gain.gain.setValueAtTime(0.3, now);
-            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
-            osc.start(now); osc.stop(now + 0.5);
-        } else if (type === 'sl') {
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(200, now);
-            osc.frequency.linearRampToValueAtTime(150, now + 0.3);
-            gain.gain.setValueAtTime(0.4, now);
-            gain.gain.linearRampToValueAtTime(0, now + 0.8);
-            osc.start(now); osc.stop(now + 0.8);
-        } else if (type === 'any') {
-            osc.type = 'square';
-            osc.frequency.setValueAtTime(600, now);
-            gain.gain.setValueAtTime(0.1, now);
-            gain.gain.linearRampToValueAtTime(0, now + 0.2);
-            osc.start(now); osc.stop(now + 0.2);
+        function checkCustomAlerts(gapVal) {
+            const NOW = Date.now();
+            const DELAY = 5000;
+            const tpVal = parseInt(inpTp.value);
+            if (!isNaN(tpVal) && gapVal === tpVal && (NOW - lastAlertTime.tp > DELAY)) {
+                lastAlertTime.tp = NOW; cardTp.classList.add('hit-tp'); playCustomSound('tp');
+                speak("Take Profit"); sendTelegram(`TP HIT: ${tpVal} ✅`); setTimeout(() => cardTp.classList.remove('hit-tp'), 1000);
+            }
+            const slVal = parseInt(inpSl.value);
+            if (!isNaN(slVal) && gapVal === slVal && (NOW - lastAlertTime.sl > DELAY)) {
+                lastAlertTime.sl = NOW; cardSl.classList.add('hit-sl'); playCustomSound('sl');
+                speak("Stop Loss"); sendTelegram(`SL HIT: ${slVal} 🆘`); setTimeout(() => cardSl.classList.remove('hit-sl'), 1000);
+            }
+            const anyVal = parseInt(inpAny.value);
+            if (!isNaN(anyVal) && gapVal === anyVal && (NOW - lastAlertTime.any > DELAY)) {
+                lastAlertTime.any = NOW; cardAny.classList.add('hit-any'); playCustomSound('any');
+                speak("Alert"); sendTelegram(`ALERT: ${anyVal} ☑️`); setTimeout(() => cardAny.classList.remove('hit-any'), 1000);
+            }
         }
-    }
 
-    window.initTrading = function() {
-        if (!audioStarted) { audioCtx.resume(); audioStarted = true; }
-        stopAlarm(); requestWakeLock();
-    }
+        function playCustomSound(type) {
+            if (isMuted) return; // ĐÃ CHẶN HỌNG
+            if (!audioStarted) return;
+            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            const now = audioCtx.currentTime;
+            if (type === 'tp') {
+                osc.type = 'sine'; osc.frequency.setValueAtTime(800, now); osc.frequency.exponentialRampToValueAtTime(1200, now + 0.1);
+                gain.gain.setValueAtTime(0.3, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+            } else if (type === 'sl') {
+                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(200, now); osc.frequency.linearRampToValueAtTime(150, now + 0.3);
+                gain.gain.setValueAtTime(0.4, now); gain.gain.linearRampToValueAtTime(0, now + 0.8);
+            } else if (type === 'any') {
+                osc.type = 'square'; osc.frequency.setValueAtTime(600, now);
+                gain.gain.setValueAtTime(0.1, now); gain.gain.linearRampToValueAtTime(0, now + 0.2);
+            }
+            osc.start(now); osc.stop(now + (type === 'any' ? 0.2 : 0.5));
+        }
 
-    function playAlarmTone(type) {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain); gain.connect(audioCtx.destination);
-        osc.type = type === 'long' ? 'sine' : 'sawtooth';
-        osc.frequency.setValueAtTime(type === 'long' ? 880 : 440, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(type === 'long' ? 440 : 220, audioCtx.currentTime + 0.5);
-        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
-        osc.start(); osc.stop(audioCtx.currentTime + 0.5);
-    }
+        function calculateEMA(prices, period) {
+            if (prices.length < period) return 0;
+            const k = 2 / (period + 1);
+            let ema = prices[0];
+            for (let i = 1; i < prices.length; i++) {
+                ema = (prices[i] * k) + (ema * (1 - k));
+            }
+            return ema;
+        }
 
-    function speak(text) {
-        const msg = new SpeechSynthesisUtterance(text);
-        msg.lang = 'en-US'; 
-        msg.rate = 1.2;     
-        window.speechSynthesis.speak(msg);
-    }
+        async function fetchBinanceEMAs() {
+            try {
+                const resM15 = await fetch("https://api.binance.com/api/v3/klines?symbol=ETHBTC&interval=15m&limit=1000");
+                const dataM15 = await resM15.json();
+                const closesM15 = dataM15.map(c => parseFloat(c[4]));
+                ethbtc_emas.m15_50 = calculateEMA(closesM15.slice(-50), 50);
 
-    function startAlarm(type) {
-        if (isAlarming) return;
-        isAlarming = true;
-        const actionText = type === 'long' ? "Open Long" : "Open Short";
-        alarmInterval = setInterval(() => {
-            playAlarmTone(type);
-            speak(actionText); 
-            if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
-        }, 1500);
-        setTimeout(stopAlarm, 10000);
-    }
+                const resH1 = await fetch("https://api.binance.com/api/v3/klines?symbol=ETHBTC&interval=1h&limit=1000");
+                const dataH1 = await resH1.json();
+                const closesH1 = dataH1.map(c => parseFloat(c[4]));
+                ethbtc_emas.h1_50 = calculateEMA(closesH1.slice(-50), 50);
+                ethbtc_emas.h1_100 = calculateEMA(closesH1.slice(-100), 100);
+                ethbtc_emas.h1_200 = calculateEMA(closesH1.slice(-200), 200);
 
-    function stopAlarm() {
-        isAlarming = false;
-        clearInterval(alarmInterval);
-        window.speechSynthesis.cancel();
-        if (navigator.vibrate) navigator.vibrate(0);
-    }
+                render();
+            } catch (err) { console.error("Binance EMA Error:", err); }
+        }
+        fetchBinanceEMAs(); setInterval(fetchBinanceEMAs, 60000);
 
-    async function requestWakeLock() {
-        try { if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); } catch (err) {}
-    }
+        onValue(btcdM15Ref, (snap) => {
+            const d = snap.val();
+            if (d) { btcd_emas.m15_50 = d.ema50; render(); }
+        });
+        onValue(btcdH1Ref, (snap) => {
+            const d = snap.val();
+            if (d) {
+                btcd_emas.h1_50 = d.ema50;
+                btcd_emas.h1_100 = d.ema100;
+                btcd_emas.h1_200 = d.ema200;
+                render();
+            }
+        });
+        onValue(btcdLiveRef, (snap) => {
+            const d = snap.val();
+            if (d) {
+                let p = (typeof d === 'object') ? d.price : parseFloat(d);
+                market.btcd_live = p;
+                lastHeartbeat = Date.now();
+                if (appState === 0) inputEl.value = p.toFixed(2);
+                if (dotEl.classList.contains('dead')) dotEl.classList.remove('dead');
+                render();
+            }
+        });
 
-    const cachedBTCD = localStorage.getItem('last_btcd_v17_cloud');
-    if (cachedBTCD) {
-        prices.btcd_cloud = parseFloat(cachedBTCD);
-        inputEl.value = prices.btcd_cloud.toFixed(2);
-    }
-
-    const ws = new WebSocket("wss://stream.binance.com:9443/ws/btcusdt@ticker/ethusdt@ticker");
-    ws.onmessage = (e) => {
-        const d = JSON.parse(e.data);
-        if (d.s === "BTCUSDT") prices.btc = parseFloat(d.c);
-        if (d.s === "ETHUSDT") prices.eth = parseFloat(d.c);
-        if (prices.btc > 0 && prices.eth > 0) prices.ratio = prices.eth / prices.btc;
-        render();
-    };
-
-    onValue(btcdRef, (snapshot) => {
-        const data = snapshot.val();
-        if (data !== null) {
-            let price = (typeof data === 'object') ? data.price : parseFloat(data);
-            if (isNaN(price)) return;
-            prices.btcd_cloud = price;
-            localStorage.setItem('last_btcd_v17_cloud', price);
-            lastHeartbeat = Date.now(); 
-            if (dotEl.classList.contains('dead')) dotEl.classList.remove('dead');
-            if (appState === 0 && inputEl) inputEl.value = price.toFixed(2);
+        const ws = new WebSocket("wss://stream.binance.com:9443/ws/btcusdt@ticker/ethusdt@ticker");
+        ws.onmessage = (e) => {
+            const d = JSON.parse(e.data);
+            if (d.s === "BTCUSDT") market.btc = parseFloat(d.c);
+            if (d.s === "ETHUSDT") market.eth = parseFloat(d.c);
+            if (market.btc > 0 && market.eth > 0) market.ratio = market.eth / market.btc;
             render();
+        };
+
+        function calcDynamicGap(pivotD, pivotP, currentD, currentP) {
+            if (!pivotD || !pivotP || !currentD || !currentP) return { fv: 0, gap: 0 };
+            const deltaD = (currentD - pivotD) / 0.1;
+            const fv = pivotP - (deltaD * SENSITIVITY * 0.00001);
+            const gap = Math.round((currentP - fv) * 100000);
+            return { fv, gap };
         }
-    });
 
-    setInterval(() => {
-        if (appState === 0 && Date.now() - lastHeartbeat > 5000) {
-            if (!dotEl.classList.contains('dead')) dotEl.classList.add('dead');
-            render();
+        function render() {
+            if (!market.ratio) return;
+
+            updateText('btc-p', market.btc.toLocaleString());
+            updateText('eth-p', market.eth.toLocaleString());
+            updateText('ratio', market.ratio.toFixed(6));
+
+            let useBtcd = (appState === 1) ? parseFloat(inputEl.value) : market.btcd_live;
+            if (isNaN(useBtcd)) useBtcd = 0;
+
+            const resOrig = calcDynamicGap(ORIGIN_D, ORIGIN_P, useBtcd, market.ratio);
+            updateRow('row-orig', 'gap-orig', 'fv-orig', resOrig);
+
+            const resM15 = calcDynamicGap(btcd_emas.m15_50, ethbtc_emas.m15_50, useBtcd, market.ratio);
+            const resH1_50 = calcDynamicGap(btcd_emas.h1_50, ethbtc_emas.h1_50, useBtcd, market.ratio);
+            const resH1_100 = calcDynamicGap(btcd_emas.h1_100, ethbtc_emas.h1_100, useBtcd, market.ratio);
+            const resH1_200 = calcDynamicGap(btcd_emas.h1_200, ethbtc_emas.h1_200, useBtcd, market.ratio);
+
+            updateRow('row-50', 'gap-50', 'fv-50', resH1_50);
+            updateRow('row-100', 'gap-100', 'fv-100', resH1_100);
+            updateRow('row-200', 'gap-200', 'fv-200', resH1_200);
+
+            const mainGap = resM15.gap;
+            updateText('fv-main', resM15.fv.toFixed(6));
+
+            const bigGapEl = document.getElementById('market-gap');
+            bigGapEl.innerText = (mainGap > 0 ? "+" : "") + mainGap;
+
+            let visualPercent = ((mainGap + 30) / 60) * 100;
+            visualPercent = Math.max(0, Math.min(100, visualPercent));
+            document.getElementById('gap-visual').style.left = visualPercent + "%";
+
+            checkCustomAlerts(mainGap);
+            const actEl = document.getElementById('action');
+            const scopeBg = document.getElementById('scope-bg');
+
+            if (mainGap <= -20) {
+                actEl.innerText = "LONG ETH / SHORT BTC"; actEl.className = "action-bar long";
+                bigGapEl.style.color = "var(--up)"; scopeBg.style.borderColor = "var(--up)";
+                startAlarm('long');
+            } else if (mainGap >= 20) {
+                actEl.innerText = "SHORT ETH / LONG BTC"; actEl.className = "action-bar short";
+                bigGapEl.style.color = "var(--down)"; scopeBg.style.borderColor = "var(--down)";
+                startAlarm('short');
+            } else {
+                actEl.innerText = "NEUTRAL - WAIT"; actEl.className = "action-bar neutral";
+                bigGapEl.style.color = "#fff"; scopeBg.style.borderColor = "var(--border)";
+                stopAlarm();
+            }
         }
-    }, 1000);
 
-    function calcGapValue(btcdVal, currentRatio) {
-        if (!btcdVal || !currentRatio) return { fv: 0, gap: 0 };
-        const deltaD = (btcdVal - D_REF) / 0.1;
-        const fv = P_REF - (deltaD * SENSITIVITY * 0.00001);
-        const gap = Math.round((currentRatio - fv) * 100000);
-        return { fv, gap };
-    }
+        function updateRow(rowId, gapId, fvId, res) {
+            const row = document.getElementById(rowId);
+            const gapEl = document.getElementById(gapId);
+            const fvEl = document.getElementById(fvId);
+            const bar = row.querySelector('.energy-bar');
 
-    function render() {
-        if (prices.btc === 0 || prices.eth === 0) return;
-        update('btc-p', prices.btc.toLocaleString());
-        update('eth-p', prices.eth.toLocaleString());
-        update('ratio', prices.ratio.toFixed(6));
-        
-        let calculationBtcd = 0;
-        let statusText = "LOADING..";
-        if (appState === 1) { 
-            const manualVal = parseFloat(inputEl.value);
-            if (!isNaN(manualVal)) { calculationBtcd = manualVal; statusText = "MANUAL"; }
-        } else { 
-            if (prices.btcd_cloud > 0) {
-                calculationBtcd = prices.btcd_cloud;
-                const isLive = !dotEl.classList.contains('dead');
-                statusText = (isLive ? "AUTO: " : "OLD: ") + calculationBtcd.toFixed(2) + "%";
-            } else { statusText = "WAITING PC..."; }
+            if (res.fv === 0) return;
+
+            gapEl.innerText = (res.gap > 0 ? "+" : "") + res.gap;
+            fvEl.innerText = res.fv.toFixed(6);
+
+            // --- VISUALS (SÁNG RỰC) ---
+            const absGap = Math.abs(res.gap);
+            let percent = (absGap / 20) * 50;
+            if (percent > 50) percent = 50;
+
+            if (res.gap < 0) {
+                bar.style.left = (50 - percent) + "%";
+                bar.style.width = percent + "%";
+                bar.style.backgroundColor = "rgba(0, 255, 170, 0.6)";
+                bar.style.boxShadow = "0 0 15px rgba(0, 255, 170, 0.8)";
+            } else if (res.gap > 0) {
+                bar.style.left = "50%";
+                bar.style.width = percent + "%";
+                bar.style.backgroundColor = "rgba(255, 77, 77, 0.6)";
+                bar.style.boxShadow = "0 0 15px rgba(255, 77, 77, 0.8)";
+            } else {
+                bar.style.width = "0%";
+                bar.style.boxShadow = "none";
+            }
+
+            row.classList.remove('alert-long', 'alert-short');
+            if (res.gap >= 20) row.classList.add('alert-short');
+            else if (res.gap <= -20) row.classList.add('alert-long');
         }
-        update('btcd-rt', statusText);
-        const mainData = calcGapValue(calculationBtcd, prices.ratio);
-        update('fv', isNaN(mainData.fv) ? "0.000000" : mainData.fv.toFixed(6));
-        
-        const bigGapEl = document.getElementById('market-gap');
-        const actEl = document.getElementById('action');
-        const scopeBg = document.getElementById('scope-bg');
-        const gapVal = isNaN(mainData.gap) ? 0 : mainData.gap;
-        
-        checkCustomAlerts(gapVal);
 
-        bigGapEl.innerText = (gapVal > 0 ? "+" : "") + gapVal;
-        let visualPercent = ((gapVal + 30) / 60) * 100;
-        visualPercent = Math.max(0, Math.min(100, visualPercent));
-        document.getElementById('gap-visual').style.left = visualPercent + "%";
-
-        if (gapVal <= -20) {
-            actEl.innerText = "LONG ETH / SHORT BTC";
-            actEl.className = "action-bar long";
-            bigGapEl.style.color = "var(--up)";
-            scopeBg.style.borderColor = "var(--up)";
-            startAlarm('long');
-        } else if (gapVal >= 20) {
-            actEl.innerText = "SHORT ETH / LONG BTC";
-            actEl.className = "action-bar short";
-            bigGapEl.style.color = "var(--down)";
-            scopeBg.style.borderColor = "var(--down)";
-            startAlarm('short');
-        } else {
-            actEl.innerText = "NEUTRAL - WAIT";
-            actEl.className = "action-bar neutral";
-            bigGapEl.style.color = "#fff";
-            scopeBg.style.borderColor = "var(--border)";
-            stopAlarm();
+        function updateText(id, val) {
+            const el = document.getElementById(id);
+            if (el && el.innerText !== val) {
+                el.innerText = val;
+                el.classList.add('pulse');
+                setTimeout(() => el.classList.remove('pulse'), 150);
+            }
         }
-    }
 
-    function update(id, val) {
-        const el = document.getElementById(id);
-        if (el && el.innerText !== val) {
-            el.innerText = val;
-            el.classList.add('pulse');
-            setTimeout(() => el.classList.remove('pulse'), 150);
+        window.initTrading = function () { if (!audioStarted) { audioCtx.resume(); audioStarted = true; } stopAlarm(); requestWakeLock(); }
+
+        function playAlarmTone(type) {
+            if (isMuted) return; // ĐÃ CHẶN HỌNG
+            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.type = type === 'long' ? 'sine' : 'sawtooth';
+            osc.frequency.setValueAtTime(type === 'long' ? 880 : 440, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(type === 'long' ? 440 : 220, audioCtx.currentTime + 0.5);
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.5);
         }
-    }
 
-    inputEl.addEventListener('input', function() {
-        appState = 1; 
-        this.classList.add('manual-mode');
-        labelEl.innerText = "BTC.D REF (MANUAL)";
-        labelEl.style.color = "var(--text-dim)";
-        render();
-    });
-
-    window.handleLabelClick = function() {
-        if (appState === 0) {
-            appState = 1; inputEl.readOnly = false;
-            inputEl.classList.add('manual-mode');
-            labelEl.innerText = "BTC.D REF (MANUAL)";
-            labelEl.style.color = "var(--text-dim)";
-            inputEl.focus();
-        } else {
-            appState = 0; inputEl.readOnly = true;
-            inputEl.classList.remove('manual-mode');
-            labelEl.innerText = "BTC.D REF (AUTO)";
-            labelEl.style.color = "var(--cyan)";
-            if(prices.btcd_cloud > 0) inputEl.value = prices.btcd_cloud.toFixed(2);
-            render();
+        function speak(text) {
+            if (isMuted) return; // ĐÃ CHẶN HỌNG
+            const msg = new SpeechSynthesisUtterance(text); msg.lang = 'en-US'; msg.rate = 1.2; window.speechSynthesis.speak(msg);
         }
-    }
 
-    document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible') requestWakeLock();
-    });
-</script>
+        function startAlarm(type) {
+            if (isAlarming) return; isAlarming = true;
+            const actionText = type === 'long' ? "Open Long" : "Open Short";
+            alarmInterval = setInterval(() => { playAlarmTone(type); speak(actionText); if (navigator.vibrate) navigator.vibrate([200, 100, 200]); }, 1500);
+            setTimeout(stopAlarm, 10000);
+        }
+        function stopAlarm() { isAlarming = false; clearInterval(alarmInterval); window.speechSynthesis.cancel(); if (navigator.vibrate) navigator.vibrate(0); }
+        async function requestWakeLock() { try { if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); } catch (err) { } }
+        document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') requestWakeLock(); });
+        setInterval(() => { if (appState === 0 && Date.now() - lastHeartbeat > 5000) { if (!dotEl.classList.contains('dead')) dotEl.classList.add('dead'); } }, 1000);
+        window.handleLabelClick = function () {
+            if (appState === 0) { appState = 1; inputEl.readOnly = false; inputEl.classList.add('manual-mode'); labelEl.innerText = "BTC.D REF (MANUAL)"; labelEl.style.color = "var(--text-dim)"; inputEl.focus(); }
+            else { appState = 0; inputEl.readOnly = true; inputEl.classList.remove('manual-mode'); labelEl.innerText = "BTC.D REF (AUTO)"; labelEl.style.color = "var(--cyan)"; if (market.btcd_live > 0) inputEl.value = market.btcd_live.toFixed(2); render(); }
+        }
+    </script>
 </body>
+
 </html>
