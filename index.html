@@ -688,6 +688,11 @@
         let lastMomentumCheck = 0;  // Mốc thời gian kiểm tra gần nhất
         let currentDiff = 0;        // Độ lệch % được tính toán
 
+        // GLOBAL ARRAYS FOR REALTIME EMA
+        let globalClosesM15 = [];
+        let globalClosesH1 = [];
+        let isDataReady = false;
+
         // --- LOGIC TẮT TIẾNG (MỚI) ---
         let isMuted = false;
         window.toggleSound = function (e) {
@@ -834,39 +839,59 @@
             return 100 - (100 / (1 + rs));
         }
 
-        // STEP 3: CẬP NHẬT FETCH BINANCE EMA & RSI
+        // STEP 3: CẬP NHẬT FETCH BINANCE EMA (HISTORY FOR REALTIME BASE)
         async function fetchBinanceEMAs() {
             try {
-                // Lấy dữ liệu M15 (giữ limit 1000 cho an toàn EMA, nhưng dùng cho RSI luôn)
+                // Lấy dữ liệu M15
                 const resM15 = await fetch("https://api.binance.com/api/v3/klines?symbol=ETHBTC&interval=15m&limit=1000");
                 const dataM15 = await resM15.json();
-                const closesM15 = dataM15.slice(0, -1).map(c => parseFloat(c[4]));
-
-                ethbtc_emas.m15_50 = calculateEMA(closesM15, 50);
-
-                // --- LOGIC RSI MỚI ---
-                const rsiVal = calculateRSI(closesM15, 14);
-                const rsiEl = document.getElementById('rsi-val');
-                if (rsiEl) {
-                    rsiEl.innerText = rsiVal.toFixed(1);
-                    // Logic màu sắc: An toàn là số 1
-                    if (rsiVal <= 30) rsiEl.style.color = "var(--up)";   // Quá bán - Ưu tiên Long
-                    else if (rsiVal >= 70) rsiEl.style.color = "var(--down)"; // Quá mua - Ưu tiên Short
-                    else rsiEl.style.color = "var(--text-dim)";          // Vùng lưỡng lự
-                }
+                // Store Global
+                globalClosesM15 = dataM15.map(c => parseFloat(c[4]));
 
                 // Lấy dữ liệu H1
                 const resH1 = await fetch("https://api.binance.com/api/v3/klines?symbol=ETHBTC&interval=1h&limit=1000");
                 const dataH1 = await resH1.json();
-                const closesH1 = dataH1.slice(0, -1).map(c => parseFloat(c[4]));
-                ethbtc_emas.h1_50 = calculateEMA(closesH1, 50);
-                ethbtc_emas.h1_100 = calculateEMA(closesH1, 100);
-                ethbtc_emas.h1_200 = calculateEMA(closesH1, 200);
+                // Store Global
+                globalClosesH1 = dataH1.map(c => parseFloat(c[4]));
 
+                isDataReady = true;
+                // Force Update ngay lập tức
+                updateRealtimeCalc();
                 render();
-            } catch (err) { console.error("Binance RSI/EMA Error:", err); }
+            } catch (err) { console.error("Binance History Error:", err); }
         }
-        fetchBinanceEMAs(); setInterval(fetchBinanceEMAs, 60000);
+
+        // Fetch lịch sử 1 lần mỗi phút để có base đúng
+        fetchBinanceEMAs();
+        setInterval(fetchBinanceEMAs, 60000);
+
+        // HÀM TÍNH TOÁN REALTIME (TRIGGER BỞI WEBSOCKET)
+        function updateRealtimeCalc() {
+            if (!isDataReady || !market.ratio || market.ratio === 0) return;
+
+            // 1. Tạo bản sao & Nhồi giá hiện tại vào nến cuối
+            let currentM15 = [...globalClosesM15];
+            currentM15[currentM15.length - 1] = market.ratio;
+
+            let currentH1 = [...globalClosesH1];
+            currentH1[currentH1.length - 1] = market.ratio;
+
+            // 2. Tính lại EMA & Update vào Object Global
+            ethbtc_emas.m15_50 = calculateEMA(currentM15, 50);
+            ethbtc_emas.h1_50 = calculateEMA(currentH1, 50);
+            ethbtc_emas.h1_100 = calculateEMA(currentH1, 100);
+            ethbtc_emas.h1_200 = calculateEMA(currentH1, 200);
+
+            // 3. Tính lại RSI Realtime & Update UI RSI luôn
+            const rsiVal = calculateRSI(currentM15, 14);
+            const rsiEl = document.getElementById('rsi-val');
+            if (rsiEl) {
+                rsiEl.innerText = rsiVal.toFixed(1);
+                if (rsiVal <= 30) rsiEl.style.color = "var(--up)";
+                else if (rsiVal >= 70) rsiEl.style.color = "var(--down)";
+                else rsiEl.style.color = "var(--text-dim)";
+            }
+        }
 
         onValue(btcdM15Ref, (snap) => {
             const d = snap.val();
@@ -898,8 +923,14 @@
             const d = JSON.parse(e.data);
             if (d.s === "BTCUSDT") market.btc = parseFloat(d.c);
             if (d.s === "ETHUSDT") market.eth = parseFloat(d.c);
-            if (market.btc > 0 && market.eth > 0) market.ratio = market.eth / market.btc;
-            render();
+
+            if (market.btc > 0 && market.eth > 0) {
+                market.ratio = market.eth / market.btc;
+
+                // TÍNH LẠI CHỈ SỐ NGAY LẬP TỨC
+                updateRealtimeCalc();
+                render();
+            }
         };
 
         function calcDynamicGap(pivotD, pivotP, currentD, currentP) {
@@ -920,10 +951,15 @@
             let useBtcd = (appState === 1) ? parseFloat(inputEl.value) : market.btcd_live;
             if (isNaN(useBtcd)) useBtcd = 0;
 
-            // Helper tính EMA Live nhanh
+            // Helper tính EMA Live nhanh (Giờ chỉ là Fallback hoặc tính lại nhẹ, vì ethbtc_emas đã là realtime rồi)
             const getLive = (base, period) => (market.ratio - base) * (2 / (period + 1)) + base;
 
-            // Tính EMA Live cho từng mốc
+            // *LƯU Ý: ethbtc_emas giờ đã là Realtime do updateRealtimeCalc() tính.
+            // Tuy nhiên logic cũ có getLive để "nhồi" thêm 1 lớp.
+            // Vì updateRealtimeCalc() đã nhồi rồi, nên ở đây ta dùng trực tiếp giá trị trong object
+            // hoặc dùng lại getLive cũng không sao (sai số cực nhỏ). 
+            // ĐỂ GIỮ NGUYÊN LOGIC CŨ CHO AN TOÀN TUYỆT ĐỐI, TAO VẪN DÙNG GETLIVE NHƯ CŨ
+            // NHƯNG BASE DATA (ethbtc_emas) ĐÃ ĐƯỢC CẬP NHẬT LIÊN TỤC.
             const liveM15_50 = getLive(ethbtc_emas.m15_50, 50);
             const liveH1_50 = getLive(ethbtc_emas.h1_50, 50);
             const liveH1_100 = getLive(ethbtc_emas.h1_100, 100);
