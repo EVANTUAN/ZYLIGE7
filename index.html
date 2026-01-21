@@ -951,19 +951,12 @@
             let useBtcd = (appState === 1) ? parseFloat(inputEl.value) : market.btcd_live;
             if (isNaN(useBtcd)) useBtcd = 0;
 
-            // Helper tính EMA Live nhanh (Giờ chỉ là Fallback hoặc tính lại nhẹ, vì ethbtc_emas đã là realtime rồi)
-            const getLive = (base, period) => (market.ratio - base) * (2 / (period + 1)) + base;
-
-            // *LƯU Ý: ethbtc_emas giờ đã là Realtime do updateRealtimeCalc() tính.
-            // Tuy nhiên logic cũ có getLive để "nhồi" thêm 1 lớp.
-            // Vì updateRealtimeCalc() đã nhồi rồi, nên ở đây ta dùng trực tiếp giá trị trong object
-            // hoặc dùng lại getLive cũng không sao (sai số cực nhỏ). 
-            // ĐỂ GIỮ NGUYÊN LOGIC CŨ CHO AN TOÀN TUYỆT ĐỐI, TAO VẪN DÙNG GETLIVE NHƯ CŨ
-            // NHƯNG BASE DATA (ethbtc_emas) ĐÃ ĐƯỢC CẬP NHẬT LIÊN TỤC.
-            const liveM15_50 = getLive(ethbtc_emas.m15_50, 50);
-            const liveH1_50 = getLive(ethbtc_emas.h1_50, 50);
-            const liveH1_100 = getLive(ethbtc_emas.h1_100, 100);
-            const liveH1_200 = getLive(ethbtc_emas.h1_200, 200);
+            // SỬA LỖI: Lấy trực tiếp giá trị chuẩn từ updateRealtimeCalc()
+            // Không dùng hàm getLive nữa để tránh bị tính chồng 2 lần (Double Smoothing)
+            const liveM15_50 = ethbtc_emas.m15_50;
+            const liveH1_50 = ethbtc_emas.h1_50;
+            const liveH1_100 = ethbtc_emas.h1_100;
+            const liveH1_200 = ethbtc_emas.h1_200;
 
             // Tính Gap dựa trên EMA Live đã khớp TradingView
             const resOrig = calcDynamicGap(ORIGIN_D, ORIGIN_P, useBtcd, market.ratio);
