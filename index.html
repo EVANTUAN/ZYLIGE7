@@ -11,7 +11,6 @@
         :root {
             --bg-color: #05080a;
             --card-bg: rgba(10, 15, 30, 0.4);
-            /* NAVY DARK 0.4 */
             --border: rgba(107, 139, 164, 0.25);
             --cyan: #00f3ff;
             --text-main: #e9ecef;
@@ -27,11 +26,7 @@
             --any-color: #00f3ff;
         }
 
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-            user-select: none;
-        }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
 
         body {
             font-family: 'Rajdhani', sans-serif;
@@ -41,534 +36,154 @@
                 linear-gradient(90deg, rgba(107, 139, 164, 0.03) 1px, transparent 1px);
             background-size: 40px 40px;
             color: var(--text-main);
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             min-height: 100dvh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            display: flex; flex-direction: column; align-items: center;
         }
 
         .app-container {
-            width: 100%;
-            max-width: 450px;
-            min-height: 100dvh;
-            display: flex;
-            flex-direction: column;
-            padding: 16px 20px 20px 20px;
-            gap: 10px;
-            position: relative;
+            width: 100%; max-width: 450px; min-height: 100dvh;
+            display: flex; flex-direction: column;
+            padding: 16px 20px 20px 20px; gap: 10px; position: relative;
         }
 
         /* HEADER */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 8px;
-            position: relative;
-            /* Để chứa thanh velocity */
-        }
-
-        /* THANH CHỨA TỐC ĐỘ */
+        .header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; position: relative; }
+        
         .velocity-container {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: rgba(107, 139, 164, 0.1);
-            /* Màu nền mờ */
-            overflow: hidden;
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 2px;
+            background: rgba(107, 139, 164, 0.1); overflow: hidden;
         }
 
         #velocity-bar {
-            position: absolute;
-            height: 100%;
-            width: 0%;
-            /* Mặc định bằng 0 */
-            left: 50%;
-            /* Xuất phát từ giữa */
-            background: var(--cyan);
-            transition: all 0.2s ease;
-            box-shadow: 0 0 10px var(--cyan);
+            position: absolute; height: 100%; width: 0%; left: 50%;
+            background: var(--cyan); transition: all 0.2s ease; box-shadow: 0 0 10px var(--cyan);
         }
 
-        .brand {
-            font-weight: 700;
-            font-size: 1.5rem;
-            letter-spacing: 2px;
-            color: #fff;
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-        }
+        .brand { font-weight: 700; font-size: 1.5rem; letter-spacing: 2px; color: #fff; text-shadow: 0 0 15px rgba(255, 255, 255, 0.2); }
 
-        /* NÚT TẮT ÂM (LIVE TAG) */
         .live-tag {
-            color: var(--cyan);
-            font-size: 0.8rem;
-            font-weight: 700;
-            background: rgba(0, 243, 255, 0.05);
-            padding: 4px 10px;
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s;
-            /* Thêm hiệu ứng bấm */
+            color: var(--cyan); font-size: 0.8rem; font-weight: 700;
+            background: rgba(0, 243, 255, 0.05); padding: 4px 10px;
+            border: 1px solid rgba(0, 243, 255, 0.3); border-radius: 4px;
+            cursor: pointer; transition: all 0.3s;
         }
 
         .live-dot {
-            display: inline-block;
-            width: 6px;
-            height: 6px;
-            background-color: var(--cyan);
-            border-radius: 50%;
-            margin-right: 8px;
-            box-shadow: 0 0 5px var(--cyan);
-            transition: all 0.3s ease;
+            display: inline-block; width: 6px; height: 6px;
+            background-color: var(--cyan); border-radius: 50%; margin-right: 8px;
+            box-shadow: 0 0 5px var(--cyan); transition: all 0.3s ease;
         }
-
-        .live-dot.dead {
-            background-color: var(--down);
-            box-shadow: 0 0 8px var(--down);
-            animation: blinkRed 1s infinite;
-        }
-
-        @keyframes blinkRed {
-            0% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.3;
-            }
-
-            100% {
-                opacity: 1;
-            }
-        }
+        .live-dot.dead { background-color: var(--down); box-shadow: 0 0 8px var(--down); animation: blinkRed 1s infinite; }
+        @keyframes blinkRed { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 
         /* BTCD SECTION */
-        .btcd-section {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-top: 5px;
-        }
-
-        .btcd-label {
-            font-size: 0.9rem;
-            color: var(--cyan);
-            font-weight: 700;
-            cursor: pointer;
-        }
+        .btcd-section { display: flex; align-items: center; justify-content: space-between; margin-top: 5px; }
+        .btcd-label { font-size: 0.9rem; color: var(--cyan); font-weight: 700; cursor: pointer; }
 
         #btcd-input {
-            width: 120px;
-            height: 45px;
-            background: #000;
-            border: 1px solid #1a2533;
-            border-radius: 8px;
-            color: var(--cyan);
-            font-size: 1.8rem;
-            font-family: 'Rajdhani', sans-serif;
-            font-weight: 700;
-            text-align: center;
-            outline: none;
-            transition: border-color 0.3s;
-
-            /* CĂN CHỈNH QUAN TRỌNG */
-            display: block;
-            /* Ép về block để line-height có tác dụng */
-            line-height: 43px;
-            /* Phải bằng đúng height của ô để căn giữa dọc */
-            text-indent: 1.5px;
-            padding: 0 !important;
-            /* Xóa bỏ hoàn toàn padding mặc định của trình duyệt */
-            appearance: none;
-            /* Xóa bỏ mọi định dạng mặc định của hệ điều hành */
-            -webkit-appearance: none;
-            letter-spacing: -1px;
-            padding-top: 1px !important;
+            width: 120px; height: 45px; background: #000;
+            border: 1px solid #1a2533; border-radius: 8px;
+            color: var(--cyan); font-size: 1.8rem; font-family: 'Rajdhani', sans-serif;
+            font-weight: 700; text-align: center; outline: none;
+            transition: border-color 0.3s; display: block; line-height: 43px;
+            text-indent: 1.5px; padding: 0 !important; appearance: none;
+            -webkit-appearance: none; letter-spacing: -1px; padding-top: 1px !important;
         }
-
-
-        #btcd-input:focus {
-            border-color: var(--cyan);
-        }
-
-        #btcd-input.manual-mode {
-            border-color: var(--text-dim);
-            color: #fff;
-            background: #111;
-        }
+        #btcd-input:focus { border-color: var(--cyan); }
+        #btcd-input.manual-mode { border-color: var(--text-dim); color: #fff; background: #111; }
 
         /* SCOPE CONTAINER */
-        /* --- TÌM VÀ THAY THẾ ĐOẠN NÀY --- */
         .scope-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            position: relative;
-            margin: 5px 0;
-            padding: 15px 0;
-            min-height: 180px;
-            transition: all 0.3s ease;
-            /* Thêm để loé sáng mượt */
-            overflow: hidden;
-            /* Quan trọng để hào quang không tràn */
+            flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px;
+            position: relative; margin: 5px 0; padding: 15px 0; min-height: 180px;
+            transition: all 0.3s ease; overflow: hidden;
         }
+        .scope-container::before, .scope-container::after {
+            content: ''; position: absolute; top: 0; bottom: 0; width: 60px;
+            opacity: 0; transition: opacity 0.3s ease; pointer-events: none; z-index: 1;
+        }
+        .scope-container.buy-flow::before { left: 0; background: linear-gradient(to right, rgba(0, 255, 170, 0.2), transparent); opacity: 1; }
+        .scope-container.sell-flow::after { right: 0; background: linear-gradient(to left, rgba(255, 77, 77, 0.2), transparent); opacity: 1; }
 
-        /* THÊM VÀO NGAY DƯỚI .scope-container */
-        .scope-container::before,
-        .scope-container::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 60px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        /* Hào quang Trái (Mua - Up) */
-        .scope-container.buy-flow::before {
-            left: 0;
-            background: linear-gradient(to right, rgba(0, 255, 170, 0.2), transparent);
-            opacity: 1;
-        }
-
-        /* Hào quang Phải (Bán - Down) */
-        .scope-container.sell-flow::after {
-            right: 0;
-            background: linear-gradient(to left, rgba(255, 77, 77, 0.2), transparent);
-            opacity: 1;
-        }
-
-        .scope-corner {
-            position: absolute;
-            width: 15px;
-            height: 15px;
-            border-color: var(--text-dim);
-            border-style: solid;
-            opacity: 0.5;
-        }
-
-        .tl {
-            top: 8px;
-            left: 8px;
-            border-width: 2px 0 0 2px;
-        }
-
-        .tr {
-            top: 8px;
-            right: 8px;
-            border-width: 2px 2px 0 0;
-        }
-
-        .bl {
-            bottom: 8px;
-            left: 8px;
-            border-width: 0 0 2px 2px;
-        }
-
-        .br {
-            bottom: 8px;
-            right: 8px;
-            border-width: 0 2px 2px 0;
-        }
+        .scope-corner { position: absolute; width: 15px; height: 15px; border-color: var(--text-dim); border-style: solid; opacity: 0.5; }
+        .tl { top: 8px; left: 8px; border-width: 2px 0 0 2px; }
+        .tr { top: 8px; right: 8px; border-width: 2px 2px 0 0; }
+        .bl { bottom: 8px; left: 8px; border-width: 0 0 2px 2px; }
+        .br { bottom: 8px; right: 8px; border-width: 0 2px 2px 0; }
 
         #market-gap {
-            font-size: 8.5rem;
-            font-weight: 700;
-            line-height: 1;
-            letter-spacing: -4px;
-            text-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-            transition: color 0.2s;
-            position: relative;
-            z-index: 10;
+            font-size: 8.5rem; font-weight: 700; line-height: 1; letter-spacing: -4px;
+            text-shadow: 0 0 30px rgba(0, 0, 0, 0.5); transition: color 0.2s; position: relative; z-index: 10;
         }
 
         .gap-meter {
-            width: 85%;
-            height: 4px;
-            background: #1a2533;
-            border-radius: 2px;
-            position: relative;
-            overflow: hidden;
-            margin-top: 15px;
-            z-index: 10;
+            width: 85%; height: 4px; background: #1a2533; border-radius: 2px;
+            position: relative; overflow: hidden; margin-top: 15px; z-index: 10;
         }
-
         .gap-indicator {
-            width: 6px;
-            height: 100%;
-            background: #fff;
-            position: absolute;
-            left: 50%;
-            top: 0;
-            transform: translateX(-50%);
-            transition: left 0.1s ease-out;
-            box-shadow: 0 0 8px #fff;
+            width: 6px; height: 100%; background: #fff; position: absolute; left: 50%;
+            top: 0; transform: translateX(-50%); transition: left 0.1s ease-out; box-shadow: 0 0 8px #fff;
         }
-
         .gap-thresholds {
-            width: 85%;
-            display: flex;
-            justify-content: space-between;
-            margin-top: 5px;
-            font-size: 0.7rem;
-            color: var(--text-dim);
-            font-weight: 600;
-            z-index: 10;
+            width: 85%; display: flex; justify-content: space-between; margin-top: 5px;
+            font-size: 0.7rem; color: var(--text-dim); font-weight: 600; z-index: 10;
         }
+        .gap-thresholds span { flex: 1; }
+        .gap-thresholds span:nth-child(1) { text-align: left; }
+        .gap-thresholds span:nth-child(2) { text-align: center; }
+        .gap-thresholds span:nth-child(3) { text-align: right; }
 
-        /* Thêm đoạn này để ép 3 phần tử có độ rộng bằng nhau */
-        .gap-thresholds span {
-            flex: 1;
-        }
-
-        .gap-thresholds span:nth-child(1) {
-            text-align: left;
-        }
-
-        .gap-thresholds span:nth-child(2) {
-            text-align: center;
-        }
-
-        /* Số 0 sẽ ở chính giữa trục */
-        .gap-thresholds span:nth-child(3) {
-            text-align: right;
-        }
-
-        /* --- ENERGY BAR STACK --- */
-        .ema-stack {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            margin-bottom: 5px;
-            width: 100%;
-        }
-
+        /* EMA STACK */
+        .ema-stack { display: flex; flex-direction: column; gap: 5px; margin-bottom: 5px; width: 100%; }
         .ema-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 0 12px;
-            height: 38px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            display: flex; justify-content: space-between; align-items: center;
+            background: var(--card-bg); border: 1px solid var(--border); border-radius: 6px;
+            padding: 0 12px; height: 38px; transition: all 0.3s ease; position: relative; overflow: hidden;
         }
-
-        /* TEXT */
-        .ema-name,
-        .ema-gap,
-        .ema-price {
-            position: relative;
-            z-index: 5;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
-        }
-
-        .ema-name {
-            font-size: 0.7rem;
-            color: var(--text-dim);
-            font-weight: 700;
-            letter-spacing: 1px;
-            width: 70px;
-        }
-
-        .ema-gap {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: #fff;
-            text-align: center;
-            flex: 1;
-        }
-
-        .ema-price {
-            font-size: 0.8rem;
-            color: var(--text-dim);
-            font-weight: 600;
-            text-align: right;
-            width: 70px;
-        }
-
-        /* CENTER LINE */
-        .ema-row::after {
-            content: '';
-            position: absolute;
-            left: 50%;
-            top: 10%;
-            bottom: 10%;
-            width: 1px;
-            background: rgba(255, 255, 255, 0.1);
-            z-index: 1;
-        }
-
-        /* ENERGY BAR */
+        .ema-name, .ema-gap, .ema-price { position: relative; z-index: 5; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8); }
+        .ema-name { font-size: 0.7rem; color: var(--text-dim); font-weight: 700; letter-spacing: 1px; width: 70px; }
+        .ema-gap { font-size: 0.95rem; font-weight: 700; color: #fff; text-align: center; flex: 1; }
+        .ema-price { font-size: 0.8rem; color: var(--text-dim); font-weight: 600; text-align: right; width: 70px; }
+        .ema-row::after { content: ''; position: absolute; left: 50%; top: 10%; bottom: 10%; width: 1px; background: rgba(255, 255, 255, 0.1); z-index: 1; }
         .energy-bar {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            height: 100%;
-            width: 0%;
-            left: 50%;
-            z-index: 2;
-            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            opacity: 0.4;
+            position: absolute; top: 0; bottom: 0; height: 100%; width: 0%; left: 50%;
+            z-index: 2; transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); opacity: 0.4;
         }
+        .ema-row.alert-long { border-color: var(--up); box-shadow: var(--neon-green); }
+        .ema-row.alert-short { border-color: var(--down); box-shadow: var(--neon-red); }
 
-        /* Border Highlight */
-        .ema-row.alert-long {
-            border-color: var(--up);
-            box-shadow: var(--neon-green);
-        }
-
-        .ema-row.alert-short {
-            border-color: var(--down);
-            box-shadow: var(--neon-red);
-        }
-
-        .ema-row.active-scope {
-            border: 1px solid var(--cyan);
-            background: rgba(0, 243, 255, 0.1);
-        }
-
-        /* GRID 4x2 */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 6px;
-            margin-bottom: 5px;
-        }
-
+        /* GRID */
+        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 5px; }
         .card {
-            background: var(--card-bg);
-            padding: 6px 2px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 55px;
+            background: var(--card-bg); padding: 6px 2px; border-radius: 8px; border: 1px solid var(--border);
+            display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 55px;
         }
-
-        .label {
-            font-size: 0.6rem;
-            color: var(--text-dim);
-            font-weight: 700;
-            text-transform: uppercase;
-            white-space: nowrap;
-        }
-
-        .val {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #fff;
-            margin-top: 2px;
-        }
-
+        .label { font-size: 0.6rem; color: var(--text-dim); font-weight: 700; text-transform: uppercase; white-space: nowrap; }
+        .val { font-size: 1rem; font-weight: 600; color: #fff; margin-top: 2px; }
         .trade-input {
-            background: transparent;
-            border: none;
-            color: #fff;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 700;
-            width: 100%;
-            padding: 0;
-            margin: 0;
-            outline: none;
-            text-align: center;
-            -moz-appearance: textfield;
+            background: transparent; border: none; color: #fff; font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem; font-weight: 700; width: 100%; padding: 0; margin: 0;
+            outline: none; text-align: center; -moz-appearance: textfield;
         }
-
-        .trade-input:focus {
-            color: var(--cyan);
-        }
-
-        .trade-input::-webkit-outer-spin-button,
-        .trade-input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-
-        .trade-input {
-            -moz-appearance: textfield;
-        }
-
+        .trade-input:focus { color: var(--cyan); }
+        .trade-input::-webkit-outer-spin-button, .trade-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        
         /* ACTION BAR */
         .action-bar {
-            padding: 15px;
-            border-radius: 12px;
-            text-align: center;
-            font-weight: 700;
-            font-size: 1.4rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            transition: all 0.3s ease;
-            margin-top: auto;
+            padding: 15px; border-radius: 12px; text-align: center; font-weight: 700;
+            font-size: 1.4rem; text-transform: uppercase; letter-spacing: 1.5px;
+            transition: all 0.3s ease; margin-top: auto;
         }
-
-        .neutral {
-            background: var(--card-bg);
-            color: var(--text-dim);
-            border: 1px solid var(--border);
-        }
-
-        .long {
-            background: rgba(16, 185, 129, 0.2);
-            color: var(--up);
-            border: 1px solid var(--up);
-            box-shadow: var(--neon-green);
-        }
-
-        .short {
-            background: rgba(239, 68, 68, 0.2);
-            color: var(--down);
-            border: 1px solid var(--down);
-            box-shadow: var(--neon-red);
-        }
-
-        .pulse {
-            animation: flash 0.3s ease-out;
-        }
-
-        @keyframes flash {
-            0% {
-                filter: brightness(2);
-            }
-
-            100% {
-                filter: brightness(1);
-            }
-        }
-
-        .hit-tp {
-            border-color: var(--tp-color) !important;
-            box-shadow: 0 0 10px var(--tp-color) inset !important;
-        }
-
-        .hit-sl {
-            border-color: var(--sl-color) !important;
-            box-shadow: 0 0 10px var(--sl-color) inset !important;
-        }
-
-        .hit-any {
-            border-color: var(--any-color) !important;
-            box-shadow: 0 0 10px var(--any-color) inset !important;
-        }
+        .neutral { background: var(--card-bg); color: var(--text-dim); border: 1px solid var(--border); }
+        .long { background: rgba(16, 185, 129, 0.2); color: var(--up); border: 1px solid var(--up); box-shadow: var(--neon-green); }
+        .short { background: rgba(239, 68, 68, 0.2); color: var(--down); border: 1px solid var(--down); box-shadow: var(--neon-red); }
+        .pulse { animation: flash 0.3s ease-out; }
+        @keyframes flash { 0% { filter: brightness(2); } 100% { filter: brightness(1); } }
+        .hit-tp { border-color: var(--tp-color) !important; box-shadow: 0 0 10px var(--tp-color) inset !important; }
+        .hit-sl { border-color: var(--sl-color) !important; box-shadow: 0 0 10px var(--sl-color) inset !important; }
+        .hit-any { border-color: var(--any-color) !important; box-shadow: 0 0 10px var(--any-color) inset !important; }
     </style>
 </head>
 
@@ -578,11 +193,8 @@
         <div class="header">
             <div class="brand">RADAGAP</div>
             <div class="live-tag" id="sound-btn" onclick="toggleSound(event)">®EVANTUAN</div>
-            <div class="velocity-container">
-                <div id="velocity-bar"></div>
-            </div>
+            <div class="velocity-container"><div id="velocity-bar"></div></div>
         </div>
-
 
         <div class="btcd-section">
             <div style="display:flex; align-items:center">
@@ -593,70 +205,42 @@
         </div>
 
         <div class="scope-container" id="scope-bg">
-            <div class="scope-corner tl"></div>
-            <div class="scope-corner tr"></div>
-            <div class="scope-corner bl"></div>
-            <div class="scope-corner br"></div>
+            <div class="scope-corner tl"></div><div class="scope-corner tr"></div>
+            <div class="scope-corner bl"></div><div class="scope-corner br"></div>
             <div id="market-gap">0</div>
-            <div class="gap-meter">
-                <div class="gap-indicator" id="gap-visual"></div>
-            </div>
-            <div class="gap-thresholds">
-                <span>LONG (-30)</span>
-                <span>0</span>
-                <span>SHORT (+30)</span>
-            </div>
+            <div class="gap-meter"><div class="gap-indicator" id="gap-visual"></div></div>
+            <div class="gap-thresholds"><span>LONG (-30)</span><span>0</span><span>SHORT (+30)</span></div>
         </div>
 
         <div class="ema-stack">
             <div class="ema-row" id="row-orig">
                 <div class="energy-bar"></div> <span class="ema-name">EMA</span>
-                <span class="ema-gap" id="gap-orig">Wait...</span>
-                <span class="ema-price" id="fv-orig">--</span>
+                <span class="ema-gap" id="gap-orig">Wait...</span><span class="ema-price" id="fv-orig">--</span>
             </div>
             <div class="ema-row" id="row-50">
-                <div class="energy-bar"></div>
-                <span class="ema-name">EMA50</span>
-                <span class="ema-gap" id="gap-50">Wait...</span>
-                <span class="ema-price" id="fv-50">--</span>
+                <div class="energy-bar"></div> <span class="ema-name">EMA50</span>
+                <span class="ema-gap" id="gap-50">Wait...</span><span class="ema-price" id="fv-50">--</span>
             </div>
             <div class="ema-row" id="row-100">
-                <div class="energy-bar"></div>
-                <span class="ema-name">EMA100</span>
-                <span class="ema-gap" id="gap-100">Wait...</span>
-                <span class="ema-price" id="fv-100">--</span>
+                <div class="energy-bar"></div> <span class="ema-name">EMA100</span>
+                <span class="ema-gap" id="gap-100">Wait...</span><span class="ema-price" id="fv-100">--</span>
             </div>
             <div class="ema-row" id="row-200">
-                <div class="energy-bar"></div>
-                <span class="ema-name">EMA200</span>
-                <span class="ema-gap" id="gap-200">Wait...</span>
-                <span class="ema-price" id="fv-200">--</span>
+                <div class="energy-bar"></div> <span class="ema-name">EMA200</span>
+                <span class="ema-gap" id="gap-200">Wait...</span><span class="ema-price" id="fv-200">--</span>
             </div>
         </div>
 
         <div class="grid">
-            <div class="card"><span class="label">BTC</span>
-                <div id="btc-p" class="val">0.00</div>
-            </div>
-            <div class="card"><span class="label">ETH</span>
-                <div id="eth-p" class="val">0.00</div>
-            </div>
-            <div class="card"><span class="label">ETH/BTC</span>
-                <div id="ratio" class="val" style="color:var(--cyan)">0.00</div>
-            </div>
+            <div class="card"><span class="label">BTC</span><div id="btc-p" class="val">0.00</div></div>
+            <div class="card"><span class="label">ETH</span><div id="eth-p" class="val">0.00</div></div>
+            <div class="card"><span class="label">ETH/BTC</span><div id="ratio" class="val" style="color:var(--cyan)">0.00</div></div>
+            <div class="card"><span class="label">RSI</span><div id="rsi-val" class="val" style="color:var(--text-dim)">--</div></div>
 
-            <div class="card"><span class="label">RSI</span>
-                <div id="rsi-val" class="val" style="color:var(--text-dim)">--</div>
-            </div>
-
-            <div class="card"><span class="label">ENTRY</span><input type="number" id="inp-entry" class="trade-input">
-            </div>
-            <div class="card" id="card-tp"><span class="label">TP</span><input type="number" id="inp-tp"
-                    class="trade-input"></div>
-            <div class="card" id="card-sl"><span class="label">SL</span><input type="number" id="inp-sl"
-                    class="trade-input" readonly></div>
-            <div class="card" id="card-any"><span class="label">ANY</span><input type="number" id="inp-any"
-                    class="trade-input"></div>
+            <div class="card"><span class="label">ENTRY</span><input type="number" id="inp-entry" class="trade-input"></div>
+            <div class="card" id="card-tp"><span class="label">TP</span><input type="number" id="inp-tp" class="trade-input"></div>
+            <div class="card" id="card-sl"><span class="label">SL</span><input type="number" id="inp-sl" class="trade-input" readonly></div>
+            <div class="card" id="card-any"><span class="label">ANY</span><input type="number" id="inp-any" class="trade-input"></div>
         </div>
 
         <div id="action" class="action-bar neutral">WAITING SIGNAL...</div>
@@ -684,28 +268,28 @@
         let market = { btc: 0, eth: 0, ratio: 0, btcd_live: 0 };
         let btcd_emas = { m15_50: 0, h1_50: 0, h1_100: 0, h1_200: 0 };
         let ethbtc_emas = { m15_50: 0, h1_50: 0, h1_100: 0, h1_200: 0 };
-        let refRatio = 0;           // Tỷ giá tham chiếu để so sánh
-        let lastMomentumCheck = 0;  // Mốc thời gian kiểm tra gần nhất
-        let currentDiff = 0;        // Độ lệch % được tính toán
+        let refRatio = 0;
+        let lastMomentumCheck = 0;
+        let currentDiff = 0;
 
-        // GLOBAL ARRAYS FOR REALTIME EMA
         let globalClosesM15 = [];
         let globalClosesH1 = [];
         let isDataReady = false;
 
-        // --- LOGIC TẮT TIẾNG (MỚI) ---
+        // --- RSI STATE MACHINE (WILDER SMOOTHING) ---
+        let rsiState = { avgGain: 0, avgLoss: 0, lastClose: 0, ready: false };
+        const RSI_PERIOD = 14;
+
+        // AUDIO SYSTEM
         let isMuted = false;
         window.toggleSound = function (e) {
             e.stopPropagation();
             isMuted = !isMuted;
             const btn = document.getElementById('sound-btn');
-            if (isMuted) {
-                window.speechSynthesis.cancel();
-            } else {
-                // Kêu bíp
+            if (isMuted) { window.speechSynthesis.cancel(); } 
+            else {
                 if (audioCtx.state === 'suspended') audioCtx.resume();
-                const o = audioCtx.createOscillator();
-                const g = audioCtx.createGain();
+                const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
                 o.connect(g); g.connect(audioCtx.destination);
                 o.start(); o.stop(audioCtx.currentTime + 0.1);
             }
@@ -723,7 +307,6 @@
         const inputEl = document.getElementById('btcd-input');
         const labelEl = document.getElementById('status-label');
         const dotEl = document.getElementById('connection-dot');
-
         const inpEntry = document.getElementById('inp-entry');
         const inpTp = document.getElementById('inp-tp');
         const inpSl = document.getElementById('inp-sl');
@@ -752,50 +335,33 @@
             fetch(url).catch(err => console.error("Tele Error:", err));
         }
 
-        // --- CẬP NHẬT LOGIC CẢNH BÁO ---
-        // TP và SL: Theo Origin (currentOrigGap)
-        // ANY: Theo M15 (currentMainGap)
         function checkCustomAlerts(currentMainGap, currentOrigGap) {
-            const NOW = Date.now();
-            const DELAY = 5000;
-
-            // 1. Cảnh báo TP: Theo TRỤC GỐC
+            const NOW = Date.now(); const DELAY = 5000;
             const tpVal = parseInt(inpTp.value);
             if (!isNaN(tpVal) && currentOrigGap === tpVal && (NOW - lastAlertTime.tp > DELAY)) {
-                lastAlertTime.tp = NOW;
-                cardTp.classList.add('hit-tp');
-                playCustomSound('tp');
-                speak("Take Profit");
+                lastAlertTime.tp = NOW; cardTp.classList.add('hit-tp');
+                playCustomSound('tp'); speak("Take Profit");
                 sendTelegram(`TP HIT (ORIGIN): ${tpVal} ✅`);
                 setTimeout(() => cardTp.classList.remove('hit-tp'), 1000);
             }
-
-            // 2. Cảnh báo SL: Theo TRỤC GỐC
             const slVal = parseInt(inpSl.value);
             if (!isNaN(slVal) && currentOrigGap === slVal && (NOW - lastAlertTime.sl > DELAY)) {
-                lastAlertTime.sl = NOW;
-                cardSl.classList.add('hit-sl');
-                playCustomSound('sl');
-                speak("Stop Loss");
+                lastAlertTime.sl = NOW; cardSl.classList.add('hit-sl');
+                playCustomSound('sl'); speak("Stop Loss");
                 sendTelegram(`SL HIT (ORIGIN): ${slVal} 🆘`);
                 setTimeout(() => cardSl.classList.remove('hit-sl'), 1000);
             }
-
-            // 3. Cảnh báo ANY: Vẫn giữ theo M15
             const anyVal = parseInt(inpAny.value);
             if (!isNaN(anyVal) && currentMainGap === anyVal && (NOW - lastAlertTime.any > DELAY)) {
-                lastAlertTime.any = NOW;
-                cardAny.classList.add('hit-any');
-                playCustomSound('any');
-                speak("Alert");
+                lastAlertTime.any = NOW; cardAny.classList.add('hit-any');
+                playCustomSound('any'); speak("Alert");
                 sendTelegram(`ALERT (M15): ${anyVal} ☑️`);
                 setTimeout(() => cardAny.classList.remove('hit-any'), 1000);
             }
         }
 
         function playCustomSound(type) {
-            if (isMuted) return; // ĐÃ CHẶN HỌNG
-            if (!audioStarted) return;
+            if (isMuted) return; if (!audioStarted) return;
             const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
             osc.connect(gain); gain.connect(audioCtx.destination);
             const now = audioCtx.currentTime;
@@ -816,118 +382,133 @@
             if (prices.length < period) return 0;
             const k = 2 / (period + 1);
             let ema = prices[0];
-            for (let i = 1; i < prices.length; i++) {
-                ema = (prices[i] * k) + (ema * (1 - k));
-            }
+            for (let i = 1; i < prices.length; i++) { ema = (prices[i] * k) + (ema * (1 - k)); }
             return ema;
         }
 
-        // STEP 2: THÊM HÀM TÍNH RSI
-        function calculateRSI(prices, period = 14) {
-            if (prices.length <= period) return 50;
-            let gains = 0, losses = 0;
-            // Tính tổng Gain/Loss trong 14 kỳ gần nhất
-            for (let i = 1; i <= period; i++) {
-                let diff = prices[prices.length - i] - prices[prices.length - i - 1];
-                if (diff >= 0) gains += diff;
-                else losses -= diff;
+        // --- RSI FUNCTIONS (CHUẨN TRADINGVIEW - WILDER SMOOTHING) ---
+        function calculateBaseRSI(prices) {
+            if (prices.length <= RSI_PERIOD) return;
+            let avgGain = 0; let avgLoss = 0;
+
+            // SMA 14 kỳ đầu
+            for (let i = 1; i <= RSI_PERIOD; i++) {
+                let change = prices[i] - prices[i - 1];
+                if (change >= 0) avgGain += change; else avgLoss -= change;
             }
-            let avgGain = gains / period;
-            let avgLoss = losses / period;
-            if (avgLoss === 0) return 100;
-            let rs = avgGain / avgLoss;
+            avgGain /= RSI_PERIOD; avgLoss /= RSI_PERIOD;
+
+            // Wilder's Smoothing cho phần còn lại
+            for (let i = RSI_PERIOD + 1; i < prices.length; i++) {
+                let change = prices[i] - prices[i - 1];
+                let currentGain = change > 0 ? change : 0;
+                let currentLoss = change < 0 ? -change : 0;
+                avgGain = ((avgGain * 13) + currentGain) / 14;
+                avgLoss = ((avgLoss * 13) + currentLoss) / 14;
+            }
+
+            rsiState.avgGain = avgGain;
+            rsiState.avgLoss = avgLoss;
+            rsiState.lastClose = prices[prices.length - 1];
+            rsiState.ready = true;
+        }
+
+        function calculateLiveRSI(currentPrice) {
+            if (!rsiState.ready) return 50;
+            // Tính RSI với giá Live so với giá đóng cửa nến trước
+            let change = currentPrice - rsiState.lastClose;
+            let currentGain = change > 0 ? change : 0;
+            let currentLoss = change < 0 ? -change : 0;
+
+            // Ốp công thức Wilder tạm thời (không lưu trạng thái)
+            let liveAvgGain = ((rsiState.avgGain * 13) + currentGain) / 14;
+            let liveAvgLoss = ((rsiState.avgLoss * 13) + currentLoss) / 14;
+
+            if (liveAvgLoss === 0) return 100;
+            let rs = liveAvgGain / liveAvgLoss;
             return 100 - (100 / (1 + rs));
         }
 
-        // STEP 3: CẬP NHẬT FETCH BINANCE EMA (HISTORY FOR REALTIME BASE)
         async function fetchBinanceEMAs() {
             try {
-                // Lấy dữ liệu M15
+                // Fetch M15
                 const resM15 = await fetch("https://api.binance.com/api/v3/klines?symbol=ETHBTC&interval=15m&limit=1000");
                 const dataM15 = await resM15.json();
-                // Store Global
                 globalClosesM15 = dataM15.map(c => parseFloat(c[4]));
 
-                // Lấy dữ liệu H1
+                // TÍNH RSI BASE TỪ LỊCH SỬ (Cắt nến cuối đang chạy)
+                const closedCandles = globalClosesM15.slice(0, -1);
+                calculateBaseRSI(closedCandles);
+
+                // Fetch H1
                 const resH1 = await fetch("https://api.binance.com/api/v3/klines?symbol=ETHBTC&interval=1h&limit=1000");
                 const dataH1 = await resH1.json();
-                // Store Global
                 globalClosesH1 = dataH1.map(c => parseFloat(c[4]));
 
                 isDataReady = true;
-                // Force Update ngay lập tức
                 updateRealtimeCalc();
                 render();
             } catch (err) { console.error("Binance History Error:", err); }
         }
 
-        // Fetch lịch sử 1 lần mỗi phút để có base đúng
         fetchBinanceEMAs();
         setInterval(fetchBinanceEMAs, 60000);
 
-        // HÀM TÍNH TOÁN REALTIME (TRIGGER BỞI WEBSOCKET)
         function updateRealtimeCalc() {
             if (!isDataReady || !market.ratio || market.ratio === 0) return;
 
-            // 1. Tạo bản sao & Nhồi giá hiện tại vào nến cuối
             let currentM15 = [...globalClosesM15];
             currentM15[currentM15.length - 1] = market.ratio;
 
             let currentH1 = [...globalClosesH1];
             currentH1[currentH1.length - 1] = market.ratio;
 
-            // 2. Tính lại EMA & Update vào Object Global
             ethbtc_emas.m15_50 = calculateEMA(currentM15, 50);
             ethbtc_emas.h1_50 = calculateEMA(currentH1, 50);
             ethbtc_emas.h1_100 = calculateEMA(currentH1, 100);
             ethbtc_emas.h1_200 = calculateEMA(currentH1, 200);
 
-            // 3. Tính lại RSI Realtime & Update UI RSI luôn
-            const rsiVal = calculateRSI(currentM15, 14);
+            // TÍNH RSI LIVE
+            const rsiVal = calculateLiveRSI(market.ratio);
             const rsiEl = document.getElementById('rsi-val');
             if (rsiEl) {
-                rsiEl.innerText = rsiVal.toFixed(1);
+                rsiEl.innerText = rsiVal.toFixed(2);
                 if (rsiVal <= 30) rsiEl.style.color = "var(--up)";
                 else if (rsiVal >= 70) rsiEl.style.color = "var(--down)";
                 else rsiEl.style.color = "var(--text-dim)";
             }
         }
 
-        onValue(btcdM15Ref, (snap) => {
-            const d = snap.val();
-            if (d) { btcd_emas.m15_50 = d.ema50; render(); }
-        });
+        onValue(btcdM15Ref, (snap) => { const d = snap.val(); if (d) { btcd_emas.m15_50 = d.ema50; render(); } });
         onValue(btcdH1Ref, (snap) => {
             const d = snap.val();
-            if (d) {
-                btcd_emas.h1_50 = d.ema50;
-                btcd_emas.h1_100 = d.ema100;
-                btcd_emas.h1_200 = d.ema200;
-                render();
-            }
+            if (d) { btcd_emas.h1_50 = d.ema50; btcd_emas.h1_100 = d.ema100; btcd_emas.h1_200 = d.ema200; render(); }
         });
         onValue(btcdLiveRef, (snap) => {
             const d = snap.val();
             if (d) {
                 let p = (typeof d === 'object') ? d.price : parseFloat(d);
-                market.btcd_live = p;
-                lastHeartbeat = Date.now();
+                market.btcd_live = p; lastHeartbeat = Date.now();
                 if (appState === 0) inputEl.value = p.toFixed(2);
                 if (dotEl.classList.contains('dead')) dotEl.classList.remove('dead');
                 render();
             }
         });
 
-        const ws = new WebSocket("wss://stream.binance.com:9443/ws/btcusdt@ticker/ethusdt@ticker");
+        // --- WEBSOCKET CHUẨN: LẤY CẢ 3 STREAM ---
+        // 1. btcusdt & ethusdt: Để hiển thị giá tham khảo
+        // 2. ethbtc: Để tính Ratio và RSI chính xác từng tick
+        const ws = new WebSocket("wss://stream.binance.com:9443/ws/btcusdt@ticker/ethusdt@ticker/ethbtc@ticker");
         ws.onmessage = (e) => {
             const d = JSON.parse(e.data);
+            
+            // Cập nhật hiển thị giá lẻ
             if (d.s === "BTCUSDT") market.btc = parseFloat(d.c);
             if (d.s === "ETHUSDT") market.eth = parseFloat(d.c);
 
-            if (market.btc > 0 && market.eth > 0) {
-                market.ratio = market.eth / market.btc;
-
-                // TÍNH LẠI CHỈ SỐ NGAY LẬP TỨC
+            // QUAN TRỌNG: Lấy ratio từ luồng trực tiếp ETHBTC
+            if (d.s === "ETHBTC") {
+                market.ratio = parseFloat(d.c);
                 updateRealtimeCalc();
                 render();
             }
@@ -951,29 +532,23 @@
             let useBtcd = (appState === 1) ? parseFloat(inputEl.value) : market.btcd_live;
             if (isNaN(useBtcd)) useBtcd = 0;
 
-            // SỬA LỖI: Lấy trực tiếp giá trị chuẩn từ updateRealtimeCalc()
-            // Không dùng hàm getLive nữa để tránh bị tính chồng 2 lần (Double Smoothing)
             const liveM15_50 = ethbtc_emas.m15_50;
             const liveH1_50 = ethbtc_emas.h1_50;
             const liveH1_100 = ethbtc_emas.h1_100;
             const liveH1_200 = ethbtc_emas.h1_200;
 
-            // Tính Gap dựa trên EMA Live đã khớp TradingView
             const resOrig = calcDynamicGap(ORIGIN_D, ORIGIN_P, useBtcd, market.ratio);
             const resM15 = calcDynamicGap(btcd_emas.m15_50, liveM15_50, useBtcd, market.ratio);
             const resH1_50 = calcDynamicGap(btcd_emas.h1_50, liveH1_50, useBtcd, market.ratio);
             const resH1_100 = calcDynamicGap(btcd_emas.h1_100, liveH1_100, useBtcd, market.ratio);
             const resH1_200 = calcDynamicGap(btcd_emas.h1_200, liveH1_200, useBtcd, market.ratio);
 
-            // Cập nhật giao dịch hàng
             updateRow('row-orig', 'gap-orig', 'fv-orig', resOrig);
             updateRow('row-50', 'gap-50', 'fv-50', resH1_50);
             updateRow('row-100', 'gap-100', 'fv-100', resH1_100);
             updateRow('row-200', 'gap-200', 'fv-200', resH1_200);
 
             const mainGap = resM15.gap;
-            // updateText('fv-main', resM15.fv.toFixed(5)); // Đã ẩn Element này, bỏ qua update
-
             const bigGapEl = document.getElementById('market-gap');
             bigGapEl.innerText = (mainGap > 0 ? "+" : "") + mainGap;
 
@@ -981,7 +556,6 @@
             visualPercent = Math.max(0, Math.min(100, visualPercent));
             document.getElementById('gap-visual').style.left = visualPercent + "%";
 
-            // --- TRUYỀN CẢ HAI LOẠI GAP VÀO HÀM CẢNH BÁO ---
             checkCustomAlerts(mainGap, resOrig.gap);
 
             const actEl = document.getElementById('action');
@@ -1001,41 +575,29 @@
                 stopAlarm();
             }
             const now = Date.now();
-            // Khởi tạo điểm neo nếu chưa có
             if (refRatio === 0) refRatio = market.ratio;
 
-            // Cứ mỗi 500ms (0.5 giây) mới cập nhật lực đẩy một lần để lọc nhiễu
             if (now - lastMomentumCheck > 500) {
                 currentDiff = (market.ratio - refRatio) / refRatio * 100;
                 refRatio = market.ratio;
                 lastMomentumCheck = now;
             }
 
-            // Cấu hình hiển thị
             let vBar = document.getElementById('velocity-bar');
             let scopeEl = document.getElementById('scope-bg');
-            // Tăng độ nhạy hiển thị (hệ số 2000 giúp nhìn rõ biến động nhỏ)
             let vPower = Math.min(Math.abs(currentDiff) * 2000, 50);
 
-            // Reset trạng thái lóe sáng
             scopeEl.classList.remove('buy-flow', 'sell-flow');
 
-            if (currentDiff > 0.00005) { // ETH đang nén lực Mua (Long Thrust)
-                vBar.style.left = "50%";
-                vBar.style.width = vPower + "%";
-                vBar.style.backgroundColor = "var(--cyan)";
-                scopeEl.classList.add('buy-flow');
+            if (currentDiff > 0.00005) {
+                vBar.style.left = "50%"; vBar.style.width = vPower + "%";
+                vBar.style.backgroundColor = "var(--cyan)"; scopeEl.classList.add('buy-flow');
             }
-            else if (currentDiff < -0.00005) { // ETH đang nén lực Bán (Short Thrust)
-                vBar.style.left = (50 - vPower) + "%";
-                vBar.style.width = vPower + "%";
-                vBar.style.backgroundColor = "var(--down)";
-                scopeEl.classList.add('sell-flow');
+            else if (currentDiff < -0.00005) {
+                vBar.style.left = (50 - vPower) + "%"; vBar.style.width = vPower + "%";
+                vBar.style.backgroundColor = "var(--down)"; scopeEl.classList.add('sell-flow');
             }
-            else {
-                vBar.style.width = "0%"; // Dòng tiền đứng yên
-            }
-
+            else { vBar.style.width = "0%"; }
         }
         function updateRow(rowId, gapId, fvId, res) {
             const row = document.getElementById(rowId);
@@ -1048,25 +610,17 @@
             gapEl.innerText = (res.gap > 0 ? "+" : "") + res.gap;
             fvEl.innerText = res.fv.toFixed(5);
 
-            // --- VISUALS (SÁNG RỰC) ---
             const absGap = Math.abs(res.gap);
             let percent = (absGap / 20) * 50;
             if (percent > 50) percent = 50;
 
             if (res.gap < 0) {
-                bar.style.left = (50 - percent) + "%";
-                bar.style.width = percent + "%";
-                bar.style.backgroundColor = "rgba(0, 255, 170, 0.6)";
-                bar.style.boxShadow = "0 0 15px rgba(0, 255, 170, 0.8)";
+                bar.style.left = (50 - percent) + "%"; bar.style.width = percent + "%";
+                bar.style.backgroundColor = "rgba(0, 255, 170, 0.6)"; bar.style.boxShadow = "0 0 15px rgba(0, 255, 170, 0.8)";
             } else if (res.gap > 0) {
-                bar.style.left = "50%";
-                bar.style.width = percent + "%";
-                bar.style.backgroundColor = "rgba(255, 77, 77, 0.6)";
-                bar.style.boxShadow = "0 0 15px rgba(255, 77, 77, 0.8)";
-            } else {
-                bar.style.width = "0%";
-                bar.style.boxShadow = "none";
-            }
+                bar.style.left = "50%"; bar.style.width = percent + "%";
+                bar.style.backgroundColor = "rgba(255, 77, 77, 0.6)"; bar.style.boxShadow = "0 0 15px rgba(255, 77, 77, 0.8)";
+            } else { bar.style.width = "0%"; bar.style.boxShadow = "none"; }
 
             row.classList.remove('alert-long', 'alert-short');
             if (res.gap >= 20) row.classList.add('alert-short');
@@ -1083,9 +637,8 @@
         }
 
         window.initTrading = function () { if (!audioStarted) { audioCtx.resume(); audioStarted = true; } stopAlarm(); requestWakeLock(); }
-
         function playAlarmTone(type) {
-            if (isMuted) return; // ĐÃ CHẶN HỌNG
+            if (isMuted) return;
             const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
             osc.connect(gain); gain.connect(audioCtx.destination);
             osc.type = type === 'long' ? 'sine' : 'sawtooth';
@@ -1094,12 +647,7 @@
             gain.gain.setValueAtTime(0.3, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
             osc.start(); osc.stop(audioCtx.currentTime + 0.5);
         }
-
-        function speak(text) {
-            if (isMuted) return; // ĐÃ CHẶN HỌNG
-            const msg = new SpeechSynthesisUtterance(text); msg.lang = 'en-US'; msg.rate = 1.2; window.speechSynthesis.speak(msg);
-        }
-
+        function speak(text) { if (isMuted) return; const msg = new SpeechSynthesisUtterance(text); msg.lang = 'en-US'; msg.rate = 1.2; window.speechSynthesis.speak(msg); }
         function startAlarm(type) {
             if (isAlarming) return; isAlarming = true;
             const actionText = type === 'long' ? "Open Long" : "Open Short";
@@ -1114,26 +662,12 @@
             if (appState === 0) { appState = 1; inputEl.readOnly = false; inputEl.classList.add('manual-mode'); labelEl.innerText = "BTC.D REF (MANUAL)"; labelEl.style.color = "var(--text-dim)"; inputEl.focus(); }
             else { appState = 0; inputEl.readOnly = true; inputEl.classList.remove('manual-mode'); labelEl.innerText = "BTC.D REF (AUTO)"; labelEl.style.color = "var(--cyan)"; if (market.btcd_live > 0) inputEl.value = market.btcd_live.toFixed(2); render(); }
         }
-        // --- LOGIC LƯU TRỮ DỮ LIỆU ---
         const persistFields = ['inp-entry', 'inp-tp', 'inp-any'];
-
         persistFields.forEach(id => {
-            const savedVal = localStorage.getItem(id);
-            const el = document.getElementById(id);
-            if (savedVal !== null) {
-                el.value = savedVal;
-                // Kích hoạt lại logic SL nếu là Entry
-                if (id === 'inp-entry' && savedVal !== "") {
-                    const slEl = document.getElementById('inp-sl');
-                    if (slEl) slEl.value = parseInt(savedVal) * 2;
-                }
-            }
-
-            el.addEventListener('input', () => {
-                localStorage.setItem(id, el.value);
-            });
+            const savedVal = localStorage.getItem(id); const el = document.getElementById(id);
+            if (savedVal !== null) { el.value = savedVal; if (id === 'inp-entry' && savedVal !== "") { const slEl = document.getElementById('inp-sl'); if (slEl) slEl.value = parseInt(savedVal) * 2; } }
+            el.addEventListener('input', () => { localStorage.setItem(id, el.value); });
         });
     </script>
 </body>
-
 </html>
