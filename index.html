@@ -366,7 +366,7 @@
                 const isHitRsi = rsiTarget >= lastBaseValues.rsi ? rsiCurrent >= rsiTarget : rsiCurrent <= rsiTarget;
                 if (isHitRsi) {
                     lastAlertTime.rsi = NOW;
-                    sendTelegramInstant(`⚠️ RSI ALERT: ${rsiCurrent.toFixed(2)} (Target: ${rsiTarget})`);
+                    sendTelegramInstant(`RSI ALERT: ${rsiCurrent.toFixed(2)}🟣`);
                     cardRsi.classList.add('hit-rsi');
                     playCustomSound('any');
                     speak("RSI Alert");
