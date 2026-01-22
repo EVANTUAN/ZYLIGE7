@@ -104,16 +104,15 @@
             content: ''; position: absolute; top: 0; bottom: 0; width: 80px;
             opacity: 0; transition: opacity 0.4s ease; pointer-events: none; z-index: 1;
         }
-           /* Tìm và thay thế chính xác 2 dòng này */
         .scope-container.buy-flow::before { 
             left: 0; 
-            background: linear-gradient(to right, rgba(0, 255, 170, 0.15), transparent); /* V34 dùng 0.15 */
+            background: linear-gradient(to right, rgba(0, 255, 170, 0.15), transparent);
             opacity: 1; 
         }
         
         .scope-container.sell-flow::after { 
             right: 0; 
-            background: linear-gradient(to left, rgba(255, 77, 77, 0.15), transparent); /* V34 dùng 0.15 */
+            background: linear-gradient(to left, rgba(255, 77, 77, 0.15), transparent);
             opacity: 1; 
         }
         .scope-corner { position: absolute; width: 15px; height: 15px; border-color: var(--text-dim); border-style: solid; opacity: 0.5; }
@@ -280,7 +279,7 @@
         let ethbtc_emas = { m15_50: 0, h1_50: 0, h1_100: 0, h1_200: 0 };
         
         // --- HYBRID VARIABLES ---
-        let refVisualRatio = 0; // Tỷ giá tham chiếu cho Visual
+        let refVisualRatio = 0; 
         let lastMomentumCheck = 0;
         let currentDiff = 0;
 
@@ -288,7 +287,7 @@
         let globalClosesH1 = [];
         let isDataReady = false;
 
-        // --- RSI STATE MACHINE (WILDER SMOOTHING) ---
+        // --- RSI STATE MACHINE ---
         let rsiState = { avgGain: 0, avgLoss: 0, lastClose: 0, ready: false };
         const RSI_PERIOD = 14;
 
@@ -312,26 +311,33 @@
         let audioStarted = false;
         let appState = 0;
         let lastHeartbeat = Date.now();
-        let lastAlertTime = { tp: 0, sl: 0, any: 0 };
+        let lastAlertTime = { tp: 0, sl: 0, any: 0, rsi: 0 };
         let wakeLock = null;
+
+        // Lưu trạng thái lúc gõ số để biết hướng (Direction)
+        let lastBaseValues = { tp: 0, sl: 0, any: 0, rsi: 50 };
 
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         const inputEl = document.getElementById('btcd-input');
         const labelEl = document.getElementById('status-label');
         const dotEl = document.getElementById('connection-dot');
-        const inpRsi = document.getElementById('inp-rsi'); // Đã đổi tên khớp với HTML
+        const inpRsi = document.getElementById('inp-rsi');
         const inpTp = document.getElementById('inp-tp');
         const inpSl = document.getElementById('inp-sl');
         const inpAny = document.getElementById('inp-any');
-        const cardRsi = document.getElementById('card-rsi'); // Thêm biến này để điều khiển đèn tím
+        const cardRsi = document.getElementById('card-rsi');
         const cardTp = document.getElementById('card-tp');
         const cardSl = document.getElementById('card-sl');
         const cardAny = document.getElementById('card-any');
     
-        inpRsi.addEventListener('input', () => resetAlerts('rsi'));
-        inpSl.addEventListener('input', () => resetAlerts('sl'));
-        inpTp.addEventListener('input', () => resetAlerts('tp'));
-        inpAny.addEventListener('input', () => resetAlerts('any'));
+        // Ghi nhận giá trị gốc khi người dùng bắt đầu nhập số để xác định hướng Long/Short
+        inpRsi.addEventListener('input', () => { resetAlerts('rsi'); lastBaseValues.rsi = parseFloat(document.getElementById('rsi-val')?.innerText || 50); });
+        inpTp.addEventListener('input', () => { resetAlerts('tp'); lastBaseValues.tp = currentOrigGapRef; });
+        inpSl.addEventListener('input', () => { resetAlerts('sl'); lastBaseValues.sl = currentOrigGapRef; });
+        inpAny.addEventListener('input', () => { resetAlerts('any'); lastBaseValues.any = currentMainGapRef; });
+
+        let currentOrigGapRef = 0;
+        let currentMainGapRef = 0;
 
         function resetAlerts(type) {
             if (type === 'rsi') cardRsi.classList.remove('hit-rsi');
@@ -340,23 +346,27 @@
             if (type === 'any') cardAny.classList.remove('hit-any');
         }
 
-        function sendTelegram(text) {
+        // TỐI ƯU GỬI TỨC THÌ: Không chờ phản hồi, bắn trực tiếp
+        function sendTelegramInstant(text) {
             const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage?chat_id=${TELEGRAM_CHAT_ID}&text=${encodeURIComponent(text)}`;
-            fetch(url).catch(err => console.error("Tele Error:", err));
+            fetch(url, { mode: 'no-cors' }).catch(() => {}); 
         }
 
         function checkCustomAlerts(currentMainGap, currentOrigGap) {
+            currentOrigGapRef = currentOrigGap;
+            currentMainGapRef = currentMainGap;
             const NOW = Date.now(); 
-            const DELAY = 4000; // Thời gian chặn gửi lặp lại (5 giây)
-                    // --- RSI ALERT LOGIC ---
+            const DELAY = 4000; // Chặn spam 8 giây
+
+            // 1. RSI ALERT LOGIC (TỨC THÌ & TẠT QUA)
             const rsiTarget = parseFloat(inpRsi.value);
             const rsiCurrent = parseFloat(document.getElementById('rsi-val')?.innerText || 0);
-            
-            if (!isNaN(rsiTarget) && rsiTarget > 0 && (NOW - lastAlertTime.any > DELAY)) {
-                const isHitRsi = rsiTarget > 50 ? rsiCurrent >= rsiTarget : rsiCurrent <= rsiTarget;
+            if (!isNaN(rsiTarget) && rsiTarget !== 0 && (NOW - lastAlertTime.rsi > DELAY)) {
+                // Hướng: Nếu mục tiêu > giá lúc cài (Long RSI) -> check >=. Ngược lại check <=
+                const isHitRsi = rsiTarget >= lastBaseValues.rsi ? rsiCurrent >= rsiTarget : rsiCurrent <= rsiTarget;
                 if (isHitRsi) {
-                    lastAlertTime.any = NOW;
-                    sendTelegram(`⚠️ RSI ALERT: ${rsiCurrent.toFixed(2)} (Target: ${rsiTarget})`);
+                    lastAlertTime.rsi = NOW;
+                    sendTelegramInstant(`⚠️ RSI ALERT: ${rsiCurrent.toFixed(2)} (Target: ${rsiTarget})`);
                     cardRsi.classList.add('hit-rsi');
                     playCustomSound('any');
                     speak("RSI Alert");
@@ -364,38 +374,46 @@
                 }
             }
 
-            // Kiểm tra TP (Giả sử TP là số dương, dùng >=)
-            const tpVal = parseInt(inpTp.value);
-            if (!isNaN(tpVal) && currentOrigGap >= tpVal && (NOW - lastAlertTime.tp > DELAY)) {
-                lastAlertTime.tp = NOW;
-                sendTelegram(`TP HIT: ${currentOrigGap} ✅`); // Gửi Tele ngay lập tức
-                cardTp.classList.add('hit-tp');
-                playCustomSound('tp'); 
-                speak("Take Profit");
-                setTimeout(() => cardTp.classList.remove('hit-tp'), 1000);
+            // 2. TP ALERT LOGIC (GIÁ >= HOẶC <= TÙY HƯỚNG - TẠT QUA BÁO NGAY)
+            const tpVal = parseFloat(inpTp.value);
+            if (!isNaN(tpVal) && (NOW - lastAlertTime.tp > DELAY)) {
+                const isHitTp = tpVal >= lastBaseValues.tp ? currentOrigGap >= tpVal : currentOrigGap <= tpVal;
+                if (isHitTp) {
+                    lastAlertTime.tp = NOW;
+                    sendTelegramInstant(`TP HIT: ${currentOrigGap} ✅`);
+                    cardTp.classList.add('hit-tp');
+                    playCustomSound('tp'); 
+                    speak("Take Profit");
+                    setTimeout(() => cardTp.classList.remove('hit-tp'), 1000);
+                }
             }
         
-            // Kiểm tra SL (Giả sử SL là số âm, dùng <=)
-            const slVal = parseInt(inpSl.value);
-            if (!isNaN(slVal) && currentOrigGap <= slVal && (NOW - lastAlertTime.sl > DELAY)) {
-                lastAlertTime.sl = NOW;
-                sendTelegram(`SL HIT: ${currentOrigGap} 🆘`);
-                cardSl.classList.add('hit-sl');
-                playCustomSound('sl'); 
-                speak("Stop Loss");
-                setTimeout(() => cardSl.classList.remove('hit-sl'), 1000);
+            // 3. SL ALERT LOGIC
+            const slVal = parseFloat(inpSl.value);
+            if (!isNaN(slVal) && (NOW - lastAlertTime.sl > DELAY)) {
+                const isHitSl = slVal >= lastBaseValues.sl ? currentOrigGap >= slVal : currentOrigGap <= slVal;
+                if (isHitSl) {
+                    lastAlertTime.sl = NOW;
+                    sendTelegramInstant(`SL HIT: ${currentOrigGap} 🆘`);
+                    cardSl.classList.add('hit-sl');
+                    playCustomSound('sl'); 
+                    speak("Stop Loss");
+                    setTimeout(() => cardSl.classList.remove('hit-sl'), 1000);
+                }
             }
         
-            // Kiểm tra ANY (Alert theo M15 Gap)
-            const anyVal = parseInt(inpAny.value);
-            const isHitAny = anyVal > 0 ? currentMainGap >= anyVal : currentMainGap <= anyVal;
-            if (!isNaN(anyVal) && isHitAny && (NOW - lastAlertTime.any > DELAY)) {
-                lastAlertTime.any = NOW;
-                sendTelegram(`ALERT (M15): ${currentMainGap} ☑️`);
-                cardAny.classList.add('hit-any');
-                playCustomSound('any'); 
-                speak("Alert");
-                setTimeout(() => cardAny.classList.remove('hit-any'), 1000);
+            // 4. ANY ALERT LOGIC (M15 GAP)
+            const anyVal = parseFloat(inpAny.value);
+            if (!isNaN(anyVal) && (NOW - lastAlertTime.any > DELAY)) {
+                const isHitAny = anyVal >= lastBaseValues.any ? currentMainGap >= anyVal : currentMainGap <= anyVal;
+                if (isHitAny) {
+                    lastAlertTime.any = NOW;
+                    sendTelegramInstant(`ALERT ANY: ${currentMainGap} 🔔`);
+                    cardAny.classList.add('hit-any');
+                    playCustomSound('any'); 
+                    speak("Alert");
+                    setTimeout(() => cardAny.classList.remove('hit-any'), 1000);
+                }
             }
         }
 
@@ -426,7 +444,6 @@
             return ema;
         }
 
-        // --- RSI FUNCTIONS ---
         function calculateBaseRSI(prices) {
             if (prices.length <= RSI_PERIOD) return;
             let avgGain = 0; let avgLoss = 0;
@@ -522,37 +539,23 @@
             }
         });
 
-        // --- WEBSOCKET FIXED: KÍCH HOẠT RENDER TRÊN MỌI TICK ---
-                let ws; 
-                function connectWS() {
-                    // Khởi tạo kết nối
-                    ws = new WebSocket("wss://stream.binance.com:9443/ws/btcusdt@ticker/ethusdt@ticker/ethbtc@ticker");
-        
-                    ws.onmessage = (e) => {
-                        const d = JSON.parse(e.data);
-                        // Cập nhật giá và Momentum
-                        if (d.s === "BTCUSDT") { market.btc = parseFloat(d.c); render(); } 
-                        if (d.s === "ETHUSDT") { market.eth = parseFloat(d.c); render(); }
-                        if (d.s === "ETHBTC") {
-                            market.ratio = parseFloat(d.c);
-                            updateRealtimeCalc();
-                            render();
-                        }
-                    };
-        
-                    // Tự động kết nối lại sau 3 giây nếu rớt mạng
-                    ws.onclose = () => {
-                        console.log("WS Closed. Retrying...");
-                        setTimeout(connectWS, 3000); 
-                    };
-        
-                    ws.onerror = () => ws.close(); 
+        let ws; 
+        function connectWS() {
+            ws = new WebSocket("wss://stream.binance.com:9443/ws/btcusdt@ticker/ethusdt@ticker/ethbtc@ticker");
+            ws.onmessage = (e) => {
+                const d = JSON.parse(e.data);
+                if (d.s === "BTCUSDT") { market.btc = parseFloat(d.c); render(); } 
+                if (d.s === "ETHUSDT") { market.eth = parseFloat(d.c); render(); }
+                if (d.s === "ETHBTC") {
+                    market.ratio = parseFloat(d.c);
+                    updateRealtimeCalc();
+                    render();
                 }
-        
-                // KÍCH HOẠT LỆNH CHẠY
-                connectWS(); 
-
-
+            };
+            ws.onclose = () => { setTimeout(connectWS, 3000); };
+            ws.onerror = () => ws.close(); 
+        }
+        connectWS(); 
 
         function calcDynamicGap(pivotD, pivotP, currentD, currentP) {
             if (!pivotD || !pivotP || !currentD || !currentP) return { fv: 0, gap: 0 };
@@ -563,7 +566,6 @@
         }
 
         function render() {
-            // Chỉ render khi có đủ dữ liệu cơ bản
             if (!market.ratio || market.btc === 0 || market.eth === 0) return;
 
             updateText('btc-p', market.btc.toLocaleString());
@@ -588,11 +590,9 @@
             updateRow('row-50', 'gap-50', 'fv-50', resH1_50);
             updateRow('row-100', 'gap-100', 'fv-100', resH1_100);
             updateRow('row-200', 'gap-200', 'fv-200', resH1_200);
-            // Chèn ngay dưới dòng updateRow 200
+            
             const rOrig = document.getElementById('row-orig');
             const r100 = document.getElementById('row-100');
-            
-            // Nếu EMA100 không có tín hiệu (không phát sáng), ép EMA Gốc tắt phát sáng
             if (!r100.classList.contains('alert-long') && !r100.classList.contains('alert-short')) {
                 rOrig.classList.remove('alert-long', 'alert-short');
             }
@@ -605,6 +605,7 @@
             visualPercent = Math.max(0, Math.min(100, visualPercent));
             document.getElementById('gap-visual').style.left = visualPercent + "%";
 
+            // KIỂM TRA ALERT TRÊN MỌI TICK GIÁ
             checkCustomAlerts(mainGap, resOrig.gap);
 
             const actEl = document.getElementById('action');
@@ -624,24 +625,17 @@
                 stopAlarm();
             }
 
-            // --- VISUAL MOMENTUM LOGIC (HYBRID FIX) ---
-            // Sử dụng tỷ giá tổng hợp (Synthetic) để tạo hiệu ứng hình ảnh nhạy hơn
-            // Ratio thật (market.ratio) quá lì, không tạo được visual flow
             const now = Date.now();
-            const visualRatio = market.eth / market.btc; // Tính tỉ giá "ảo" để hiển thị xung lực
-
-                        // 1. Tăng tần suất kiểm tra (400ms thay vì 500ms)
+            const visualRatio = market.eth / market.btc; 
             if (now - lastMomentumCheck > 400) { 
                 currentDiff = (visualRatio - refVisualRatio) / refVisualRatio * 100;
                 refVisualRatio = visualRatio;
                 lastMomentumCheck = now;
             }
             
-            // 2. Tăng cường độ hiển thị (Multiplier 3000 thay vì 2000)
             let vPower = Math.min(Math.abs(currentDiff) * 3000, 50); 
             let vBar = document.getElementById('velocity-bar');
 
-            // 3. Tăng độ nhạy kích hoạt (0.00002 thay vì 0.00005)
             scopeBg.classList.remove('buy-flow', 'sell-flow');
             if (currentDiff > 0.00002) {
                 vBar.style.left = "50%"; vBar.style.width = vPower + "%";
@@ -719,10 +713,7 @@
         persistFields.forEach(id => {
             const savedVal = localStorage.getItem(id); 
             const el = document.getElementById(id);
-        
-            // Lệnh này để tự động điền lại số cũ bạn đã nhập khi load trang
             if (savedVal !== null) el.value = savedVal; 
-        
             el.addEventListener('input', () => { localStorage.setItem(id, el.value); });
         });
 
